@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ScreenCapture_Interface
@@ -28,7 +22,7 @@ namespace ScreenCapture_Interface
         }
 
         ~Form1()
-        {           
+        {
             HK.Dispose(); //取消熱鍵
             tmr.Dispose();
             notifyIcon_sc.Dispose();
@@ -39,7 +33,7 @@ namespace ScreenCapture_Interface
         {
             Time_mode = 0;
             Rb_Combine.Checked = true;
-            Rb_Ontime.Checked = true;            
+            Rb_Ontime.Checked = true;
             Btn_Stop.Enabled = false;
 
             HK = new HotKey(this.Handle, Keys.F1, Keys.None); //註冊F1為熱鍵, 如果不要組合鍵請傳Keys.None當參數
@@ -59,23 +53,23 @@ namespace ScreenCapture_Interface
                 return;
             }
             ScreenCapture SC = new ScreenCapture();
-            if(Rb_Combine.Checked)
+            if (Rb_Combine.Checked)
             {
                 SC.ScreenCapture_Single(SavePath);
             }
             else
             {
                 SC.ScreenCapture_Multiple(SavePath);
-            }            
+            }
         }
 
         private void TimeCheck()
         {
             string Now_Time = DateTime.Now.ToString("HH:mm:ss");
-            
+
             switch (Time_mode)
             {
-                case 0:                    
+                case 0:
                     if (Now_Time == SetTime)
                     {
                         Hotkey_Capture(null, null);
@@ -83,8 +77,8 @@ namespace ScreenCapture_Interface
                     }
                     break;
                 case 1:
-                    if(Convert.ToDateTime(Now_Time) >= Convert.ToDateTime(SetTime_From))
-                    {                        
+                    if (Convert.ToDateTime(Now_Time) >= Convert.ToDateTime(SetTime_From))
+                    {
                         if (frequency == 0)
                         {
                             Hotkey_Capture(null, null);
@@ -95,10 +89,10 @@ namespace ScreenCapture_Interface
                             Btn_Stop_Click(null, null);
                         }
                         --frequency;
-                    }                    
+                    }
                     break;
             }
-                        
+
         }
 
         #region Validate
@@ -125,7 +119,7 @@ namespace ScreenCapture_Interface
                 MessageBox.Show("Saving path : " + dialog.SelectedPath);
                 SavePath = dialog.SelectedPath;
             }
-                        
+
             dialog.Dispose();
         }
 
@@ -134,7 +128,7 @@ namespace ScreenCapture_Interface
             if (!SavePath_Validate(SavePath))
             {
                 return;
-            }            
+            }
 
             switch (Time_mode)
             {
@@ -146,7 +140,7 @@ namespace ScreenCapture_Interface
                     frequency = Convert.ToInt32(Num_FreH.Value * 60 + Num_FreM.Value * 60 + Num_FreS.Value);
                     SetTime_From = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":" + Num_FromS.Value).ToString("HH:mm:ss");
                     SetTime_To = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":" + Num_ToS.Value).ToString("HH:mm:ss");
-                    if(Convert.ToDateTime(SetTime_From) >= Convert.ToDateTime(SetTime_To))
+                    if (Convert.ToDateTime(SetTime_From) >= Convert.ToDateTime(SetTime_To))
                     {
                         MessageBox.Show("Set time start >= end !");
                         return;
@@ -171,8 +165,8 @@ namespace ScreenCapture_Interface
         private void Btn_Stop_Click(object sender, EventArgs e)
         {
             tmr.Stop();
-            tmr.Dispose();           
-            
+            tmr.Dispose();
+
             switch (Time_mode)
             {
                 case 0:
@@ -180,7 +174,7 @@ namespace ScreenCapture_Interface
                     Pl_Ontime.Enabled = true;
                     Num_H.Value = 0;
                     Num_M.Value = 0;
-                    Num_S.Value = 0;                    
+                    Num_S.Value = 0;
                     break;
                 case 1:
                     frequency = 0;
@@ -195,10 +189,10 @@ namespace ScreenCapture_Interface
                     Num_FromS.Value = 0;
                     Num_ToH.Value = 0;
                     Num_ToM.Value = 0;
-                    Num_ToS.Value = 0;                    
+                    Num_ToS.Value = 0;
                     break;
             }
-                        
+
             Btn_Stop.Enabled = false;
             Btn_Start.Enabled = true;
             Btn_Folder.Enabled = true;
@@ -236,7 +230,7 @@ namespace ScreenCapture_Interface
 
         private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            notifyIcon_min_MouseDoubleClick(null,null);
+            notifyIcon_min_MouseDoubleClick(null, null);
         }
 
         private void Rb_Ontime_CheckedChanged(object sender, EventArgs e)
