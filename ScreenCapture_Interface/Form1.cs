@@ -8,11 +8,11 @@ namespace ScreenCapture_Interface
     {
         private HotKey HK;
         private System.Timers.Timer tmr;
-        private string SetTime = "";
-        private int frequency;
-        private string SetTime_From = "";
-        private string SetTime_To = "";
         private string SavePath = "";
+        private DateTime SetTime;
+        private DateTime SetTime_From;
+        private DateTime SetTime_To;
+        private DateTime CaptureTime;
         private System.Windows.Forms.NotifyIcon notifyIcon_sc;
         private int Time_mode;
 
@@ -54,25 +54,24 @@ namespace ScreenCapture_Interface
             switch (Time_mode)
             {
                 case 0:
-                    if (dtNow.ToString("HH:mm") == SetTime)
+                    if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
                     {
                         Hotkey_Capture(null, null);
-                        Btn_Stop_Click(null, null);
                     }
                     break;
+
                 case 1:
-                    if (Convert.ToDateTime(dtNow.ToString("HH:mm")) >= Convert.ToDateTime(SetTime_From))
+                    if (dtNow > SetTime_From && dtNow < SetTime_To)
                     {
-                        if (frequency == 0)
+                        if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
                         {
+                            CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
                             Hotkey_Capture(null, null);
-                            frequency = Convert.ToInt32(Num_FreM.Value * 60);
                         }
-                        if (Convert.ToDateTime(dtNow.ToString("HH:mm")) > Convert.ToDateTime(SetTime_To))
-                        {
-                            Btn_Stop_Click(null, null);
-                        }
-                        --frequency;
+                    }
+                    else
+                    {
+                        CaptureTime = SetTime_From.AddMinutes(Convert.ToInt32(Num_FreM.Value));
                     }
                     break;
             }
@@ -117,18 +116,25 @@ namespace ScreenCapture_Interface
             switch (Time_mode)
             {
                 case 0:
-                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value).ToString("HH:mm");
+                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
                     Pl_Ontime.Enabled = false;
                     break;
+
                 case 1:
-                    SetTime_From = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value).ToString("HH:mm");
-                    SetTime_To = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value).ToString("HH:mm");
-                    frequency = Convert.ToInt32(Num_FreM.Value * 60);
-                    if (Convert.ToDateTime(SetTime_From) >= Convert.ToDateTime(SetTime_To))
+                    SetTime_From = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
+                    SetTime_To = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    if (SetTime_From >= SetTime_To)
                     {
                         MessageBox.Show("Set time start >= end !");
                         return;
                     }
+
+                    CaptureTime = SetTime_From.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                    while (DateTime.Now >= CaptureTime)
+                    {
+                        CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                    }
+
                     Pl_Fromto.Enabled = false;
                     break;
             }
@@ -154,21 +160,18 @@ namespace ScreenCapture_Interface
             switch (Time_mode)
             {
                 case 0:
-                    SetTime = "";
                     Pl_Ontime.Enabled = true;
                     Num_H.Value = 0;
                     Num_M.Value = 0;
                     break;
+
                 case 1:
-                    frequency = 0;
-                    SetTime_From = "";
-                    SetTime_To = "";
                     Pl_Fromto.Enabled = true;
                     Num_FromH.Value = 0;
                     Num_FromM.Value = 0;
                     Num_ToH.Value = 0;
                     Num_ToM.Value = 0;
-                    Num_FreM.Value = 0;
+                    Num_FreM.Value = 1;
                     break;
             }
 
@@ -249,7 +252,7 @@ namespace ScreenCapture_Interface
                 Num_FromM.Value = 0;
                 Num_ToH.Value = 0;
                 Num_ToM.Value = 0;
-                Num_FreM.Value = 0;
+                Num_FreM.Value = 1;
             }
         }
 

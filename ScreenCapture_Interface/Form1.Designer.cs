@@ -61,12 +61,12 @@
             this.Rb_Fromto = new System.Windows.Forms.RadioButton();
             this.Rb_Ontime = new System.Windows.Forms.RadioButton();
             this.Pl_Fromto = new System.Windows.Forms.Panel();
+            this.Lbl_Freq2 = new System.Windows.Forms.Label();
             this.Lbl_From = new System.Windows.Forms.Label();
             this.Lbl_To = new System.Windows.Forms.Label();
             this.Pl_SavePath = new System.Windows.Forms.Panel();
-            this.Lbl_SavePath = new System.Windows.Forms.Label();
             this.Txt_SavePath = new System.Windows.Forms.TextBox();
-            this.Lbl_Freq2 = new System.Windows.Forms.Label();
+            this.Lbl_SavePath = new System.Windows.Forms.Label();
             this.contextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Num_M)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Num_H)).BeginInit();
@@ -166,6 +166,7 @@
             0,
             0});
             this.Num_M.Name = "Num_M";
+            this.Num_M.ReadOnly = true;
             this.Num_M.Size = new System.Drawing.Size(31, 22);
             this.Num_M.TabIndex = 7;
             this.Num_M.Enter += new System.EventHandler(this.Num_M_Enter);
@@ -179,6 +180,7 @@
             0,
             0});
             this.Num_H.Name = "Num_H";
+            this.Num_H.ReadOnly = true;
             this.Num_H.Size = new System.Drawing.Size(31, 22);
             this.Num_H.TabIndex = 6;
             this.Num_H.Enter += new System.EventHandler(this.Num_H_Enter);
@@ -232,6 +234,7 @@
             0,
             0});
             this.Num_FromH.Name = "Num_FromH";
+            this.Num_FromH.ReadOnly = true;
             this.Num_FromH.Size = new System.Drawing.Size(31, 22);
             this.Num_FromH.TabIndex = 8;
             this.Num_FromH.Enter += new System.EventHandler(this.Num_FromH_Enter);
@@ -245,6 +248,7 @@
             0,
             0});
             this.Num_FromM.Name = "Num_FromM";
+            this.Num_FromM.ReadOnly = true;
             this.Num_FromM.Size = new System.Drawing.Size(31, 22);
             this.Num_FromM.TabIndex = 9;
             this.Num_FromM.Enter += new System.EventHandler(this.Num_FromM_Enter);
@@ -267,6 +271,7 @@
             0,
             0});
             this.Num_ToH.Name = "Num_ToH";
+            this.Num_ToH.ReadOnly = true;
             this.Num_ToH.Size = new System.Drawing.Size(31, 22);
             this.Num_ToH.TabIndex = 10;
             this.Num_ToH.Enter += new System.EventHandler(this.Num_ToH_Enter);
@@ -280,6 +285,7 @@
             0,
             0});
             this.Num_ToM.Name = "Num_ToM";
+            this.Num_ToM.ReadOnly = true;
             this.Num_ToM.Size = new System.Drawing.Size(31, 22);
             this.Num_ToM.TabIndex = 11;
             this.Num_ToM.Enter += new System.EventHandler(this.Num_ToM_Enter);
@@ -310,9 +316,20 @@
             0,
             0,
             0});
+            this.Num_FreM.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.Num_FreM.Name = "Num_FreM";
+            this.Num_FreM.ReadOnly = true;
             this.Num_FreM.Size = new System.Drawing.Size(31, 22);
             this.Num_FreM.TabIndex = 12;
+            this.Num_FreM.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.Num_FreM.Enter += new System.EventHandler(this.Num_FreM_Enter);
             // 
             // Pl_ScreenMode
@@ -405,6 +422,15 @@
             this.Pl_Fromto.Size = new System.Drawing.Size(339, 30);
             this.Pl_Fromto.TabIndex = 5;
             // 
+            // Lbl_Freq2
+            // 
+            this.Lbl_Freq2.AutoSize = true;
+            this.Lbl_Freq2.Location = new System.Drawing.Point(294, 9);
+            this.Lbl_Freq2.Name = "Lbl_Freq2";
+            this.Lbl_Freq2.Size = new System.Drawing.Size(42, 12);
+            this.Lbl_Freq2.TabIndex = 33;
+            this.Lbl_Freq2.Text = "Minutes";
+            // 
             // Lbl_From
             // 
             this.Lbl_From.AutoSize = true;
@@ -432,15 +458,6 @@
             this.Pl_SavePath.Size = new System.Drawing.Size(250, 30);
             this.Pl_SavePath.TabIndex = 20;
             // 
-            // Lbl_SavePath
-            // 
-            this.Lbl_SavePath.AutoSize = true;
-            this.Lbl_SavePath.Location = new System.Drawing.Point(3, 9);
-            this.Lbl_SavePath.Name = "Lbl_SavePath";
-            this.Lbl_SavePath.Size = new System.Drawing.Size(50, 12);
-            this.Lbl_SavePath.TabIndex = 11;
-            this.Lbl_SavePath.Text = "Save Path";
-            // 
             // Txt_SavePath
             // 
             this.Txt_SavePath.Enabled = false;
@@ -449,14 +466,14 @@
             this.Txt_SavePath.Size = new System.Drawing.Size(191, 22);
             this.Txt_SavePath.TabIndex = 12;
             // 
-            // Lbl_Freq2
+            // Lbl_SavePath
             // 
-            this.Lbl_Freq2.AutoSize = true;
-            this.Lbl_Freq2.Location = new System.Drawing.Point(294, 9);
-            this.Lbl_Freq2.Name = "Lbl_Freq2";
-            this.Lbl_Freq2.Size = new System.Drawing.Size(42, 12);
-            this.Lbl_Freq2.TabIndex = 33;
-            this.Lbl_Freq2.Text = "Minutes";
+            this.Lbl_SavePath.AutoSize = true;
+            this.Lbl_SavePath.Location = new System.Drawing.Point(3, 9);
+            this.Lbl_SavePath.Name = "Lbl_SavePath";
+            this.Lbl_SavePath.Size = new System.Drawing.Size(50, 12);
+            this.Lbl_SavePath.TabIndex = 11;
+            this.Lbl_SavePath.Text = "Save Path";
             // 
             // Form1
             // 
