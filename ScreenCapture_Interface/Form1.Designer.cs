@@ -94,6 +94,7 @@
             // 
             // Btn_Stop
             // 
+            this.Btn_Stop.Enabled = false;
             this.Btn_Stop.Location = new System.Drawing.Point(275, 109);
             this.Btn_Stop.Name = "Btn_Stop";
             this.Btn_Stop.Size = new System.Drawing.Size(44, 25);
@@ -197,6 +198,7 @@
             // Rb_Combine
             // 
             this.Rb_Combine.AutoSize = true;
+            this.Rb_Combine.Checked = true;
             this.Rb_Combine.Location = new System.Drawing.Point(115, 7);
             this.Rb_Combine.Name = "Rb_Combine";
             this.Rb_Combine.Size = new System.Drawing.Size(66, 16);
@@ -204,6 +206,7 @@
             this.Rb_Combine.TabStop = true;
             this.Rb_Combine.Text = "Combine";
             this.Rb_Combine.UseVisualStyleBackColor = true;
+            this.Rb_Combine.CheckedChanged += new System.EventHandler(this.Rb_Combine_CheckedChanged);
             // 
             // Rb_Seperate
             // 
@@ -395,6 +398,7 @@
             // Rb_Ontime
             // 
             this.Rb_Ontime.AutoSize = true;
+            this.Rb_Ontime.Checked = true;
             this.Rb_Ontime.Location = new System.Drawing.Point(115, 7);
             this.Rb_Ontime.Name = "Rb_Ontime";
             this.Rb_Ontime.Size = new System.Drawing.Size(65, 16);

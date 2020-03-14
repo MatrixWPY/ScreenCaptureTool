@@ -7,51 +7,53 @@ namespace ScreenCapture_Interface
     public partial class Form1 : Form
     {
         private HotKey HK;
-        private System.Timers.Timer tmr;
-        private string SavePath = "";
+        private System.Timers.Timer Timer;
+        private string SavePath = string.Empty;
+        private int MutipleScreenMode;
+        private int TimeCaptureMode;
         private DateTime SetTime;
-        private DateTime SetTime_From;
-        private DateTime SetTime_To;
+        private DateTime SetTimeFrom;
+        private DateTime SetTimeTo;
         private DateTime CaptureTime;
-        private System.Windows.Forms.NotifyIcon notifyIcon_sc;
-        private int Time_mode;
+        private NotifyIcon NotifyIcon;
 
         #region [Initial]
         public Form1()
         {
             InitializeComponent();
             Initial();
+            RegisterHotKey();
         }
 
         ~Form1()
         {
             HK.Dispose(); //取消熱鍵
-            tmr.Dispose();
-            notifyIcon_sc.Dispose();
+            NotifyIcon.Dispose();
+            Timer.Dispose();
         }
 
         protected void Initial()
         {
-            Time_mode = 0;
-            Rb_Combine.Checked = true;
-            Rb_Ontime.Checked = true;
-            Btn_Stop.Enabled = false;
-
-            HK = new HotKey(this.Handle, Keys.Space, Keys.None); //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
-            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Capture); //hotkey事件  
-
-            notifyIcon_sc = new System.Windows.Forms.NotifyIcon(this.components);
+            MutipleScreenMode = 0;
+            TimeCaptureMode = 0;
+            NotifyIcon = new NotifyIcon(this.components);
 
             //Btn_Folder_Click(null, null);
             //this.WindowState = FormWindowState.Minimized;
         }
         #endregion
 
-        private void TimeCheck()
+        private void RegisterHotKey()
+        {
+            HK = new HotKey(this.Handle, Keys.Space, Keys.None); //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
+            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Capture); //HotKey事件
+        }
+
+        private void CheckTimer()
         {
             DateTime dtNow = DateTime.Now;
 
-            switch (Time_mode)
+            switch (TimeCaptureMode)
             {
                 case 0:
                     if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
@@ -61,7 +63,7 @@ namespace ScreenCapture_Interface
                     break;
 
                 case 1:
-                    if (dtNow > SetTime_From && dtNow < SetTime_To)
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
                     {
                         if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
                         {
@@ -71,18 +73,18 @@ namespace ScreenCapture_Interface
                     }
                     else
                     {
-                        CaptureTime = SetTime_From.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                        CaptureTime = SetTimeFrom.AddMinutes(Convert.ToInt32(Num_FreM.Value));
                     }
                     break;
             }
         }
 
         #region [Validate]
-        private bool SavePath_Validate(string path)
+        private bool CheckSavePath(string strPath)
         {
-            if (String.IsNullOrEmpty(path) || !Directory.Exists(path))
+            if (String.IsNullOrWhiteSpace(strPath) || !Directory.Exists(strPath))
             {
-                MessageBox.Show("Saving path not exist !");
+                MessageBox.Show("Save Path Not Exist !");
                 return false;
             }
             return true;
@@ -94,11 +96,10 @@ namespace ScreenCapture_Interface
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             dialog.Description = "Saving path setting";
-            dialog.SelectedPath = "";
+            dialog.SelectedPath = string.Empty;
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                //MessageBox.Show("Saving path : " + dialog.SelectedPath);
                 Txt_SavePath.Text = dialog.SelectedPath;
                 SavePath = dialog.SelectedPath;
             }
@@ -108,12 +109,12 @@ namespace ScreenCapture_Interface
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
-            if (!SavePath_Validate(SavePath))
+            if (!CheckSavePath(SavePath))
             {
                 return;
             }
 
-            switch (Time_mode)
+            switch (TimeCaptureMode)
             {
                 case 0:
                     SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
@@ -121,15 +122,15 @@ namespace ScreenCapture_Interface
                     break;
 
                 case 1:
-                    SetTime_From = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
-                    SetTime_To = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
-                    if (SetTime_From >= SetTime_To)
+                    SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
+                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    if (SetTimeFrom >= SetTimeTo)
                     {
                         MessageBox.Show("Set time start >= end !");
                         return;
                     }
 
-                    CaptureTime = SetTime_From.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                    CaptureTime = SetTimeFrom.AddMinutes(Convert.ToInt32(Num_FreM.Value));
                     while (DateTime.Now >= CaptureTime)
                     {
                         CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
@@ -144,20 +145,20 @@ namespace ScreenCapture_Interface
             Btn_Folder.Enabled = false;
             Pl_TimeMode.Enabled = false;
 
-            tmr = new System.Timers.Timer(1000);
-            tmr.Elapsed += delegate
+            Timer = new System.Timers.Timer(1000);
+            Timer.Elapsed += delegate
             {
-                TimeCheck();
+                CheckTimer();
             };
-            tmr.Start();
+            Timer.Start();
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
         {
-            tmr.Stop();
-            tmr.Dispose();
+            Timer.Stop();
+            Timer.Dispose();
 
-            switch (Time_mode)
+            switch (TimeCaptureMode)
             {
                 case 0:
                     Pl_Ontime.Enabled = true;
@@ -183,19 +184,21 @@ namespace ScreenCapture_Interface
 
         private void Hotkey_Capture(object sender, HotKeyEventArgs e)
         {
-            if (!SavePath_Validate(SavePath))
+            if (!CheckSavePath(SavePath))
             {
                 return;
             }
 
             ScreenCapture SC = new ScreenCapture();
-            if (Rb_Combine.Checked)
+            switch (MutipleScreenMode)
             {
-                SC.ScreenCapture_Single(SavePath);
-            }
-            else
-            {
-                SC.ScreenCapture_Multiple(SavePath);
+                case 0:
+                    SC.ScreenCapture_Single(SavePath);
+                    break;
+
+                case 1:
+                    SC.ScreenCapture_Multiple(SavePath);
+                    break;
             }
         }
 
@@ -203,24 +206,18 @@ namespace ScreenCapture_Interface
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                HK.Dispose(); //取消熱鍵
-
-                this.ShowInTaskbar = false;     //讓程式在工具列中隱藏   
-
-                HK = new HotKey(this.Handle, Keys.Space, Keys.None); //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
-                HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Capture); //hotkey事件               
+                HK.Dispose();                   //取消熱鍵
+                this.ShowInTaskbar = false;     //讓程式在工具列中隱藏
+                RegisterHotKey();
             }
         }
 
         private void NotifyIcon_min_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            HK.Dispose(); //取消熱鍵
-
-            this.ShowInTaskbar = true;                   // 顯示在工具列
-            this.WindowState = FormWindowState.Normal;   // 還原視窗
-
-            HK = new HotKey(this.Handle, Keys.Space, Keys.None); //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
-            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Capture); //hotkey事件  
+            HK.Dispose();                                //取消熱鍵
+            this.ShowInTaskbar = true;                   //顯示在工具列
+            this.WindowState = FormWindowState.Normal;   //還原視窗
+            RegisterHotKey();
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -233,11 +230,23 @@ namespace ScreenCapture_Interface
             NotifyIcon_min_MouseDoubleClick(null, null);
         }
 
+        private void Rb_Combine_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Rb_Combine.Checked)
+            {
+                MutipleScreenMode = 0;
+            }
+            else
+            {
+                MutipleScreenMode = 1;
+            }
+        }
+
         private void Rb_Ontime_CheckedChanged(object sender, EventArgs e)
         {
             if (Rb_Ontime.Checked)
             {
-                Time_mode = 0;
+                TimeCaptureMode = 0;
                 Pl_Ontime.Enabled = true;
                 Pl_Fromto.Enabled = false;
                 Num_H.Value = 0;
@@ -245,7 +254,7 @@ namespace ScreenCapture_Interface
             }
             else
             {
-                Time_mode = 1;
+                TimeCaptureMode = 1;
                 Pl_Ontime.Enabled = false;
                 Pl_Fromto.Enabled = true;
                 Num_FromH.Value = 0;
@@ -296,6 +305,5 @@ namespace ScreenCapture_Interface
             SelectAll(Num_FreM);
         }
         #endregion
-
     }
 }
