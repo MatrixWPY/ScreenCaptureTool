@@ -41,24 +41,29 @@ namespace ScreenCapture_Interface
             //Btn_Folder_Click(null, null);
             //this.WindowState = FormWindowState.Minimized;
         }
-        #endregion
 
         private void RegisterHotKey()
         {
-            HK = new HotKey(this.Handle, Keys.Space, Keys.None); //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
-            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Capture); //HotKey事件
+            if (null != HK)
+            {
+                HK.Dispose();                                           //取消熱鍵
+            }
+            HK = new HotKey(this.Handle, Keys.Space, Keys.None);        //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
+            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Click); //HotKey事件
         }
+        #endregion
 
-        private void CheckTimer()
+        #region [Logic]
+        private void CheckTimer(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath)
         {
             DateTime dtNow = DateTime.Now;
 
-            switch (TimeCaptureMode)
+            switch (iTimeCaptureMode)
             {
                 case 0:
                     if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
                     {
-                        Hotkey_Capture(null, null);
+                        InvokeCapture(iMutipleScreenMode, strSavePath);
                     }
                     break;
 
@@ -68,7 +73,7 @@ namespace ScreenCapture_Interface
                         if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
                         {
                             CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                            Hotkey_Capture(null, null);
+                            InvokeCapture(iMutipleScreenMode, strSavePath);
                         }
                     }
                     else
@@ -78,6 +83,22 @@ namespace ScreenCapture_Interface
                     break;
             }
         }
+
+        private void InvokeCapture(int iMutipleScreenMode, string strSavePath)
+        {
+            ScreenCapture SC = new ScreenCapture();
+            switch (iMutipleScreenMode)
+            {
+                case 0:
+                    SC.ScreenCapture_Single(strSavePath);
+                    break;
+
+                case 1:
+                    SC.ScreenCapture_Multiple(strSavePath);
+                    break;
+            }
+        }
+        #endregion
 
         #region [Validate]
         private bool CheckSavePath(string strPath)
@@ -92,10 +113,20 @@ namespace ScreenCapture_Interface
         #endregion
 
         #region [Event]
+        private void Hotkey_Click(object sender, HotKeyEventArgs e)
+        {
+            if (!CheckSavePath(SavePath))
+            {
+                return;
+            }
+
+            InvokeCapture(MutipleScreenMode, SavePath);
+        }
+
         private void Btn_Folder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.Description = "Saving path setting";
+            dialog.Description = "Select Save Path";
             dialog.SelectedPath = string.Empty;
 
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -131,9 +162,13 @@ namespace ScreenCapture_Interface
                     }
 
                     CaptureTime = SetTimeFrom.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                    while (DateTime.Now >= CaptureTime)
+                    DateTime dtNow = DateTime.Now;
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
                     {
-                        CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                        while (dtNow >= CaptureTime)
+                        {
+                            CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
+                        }
                     }
 
                     Pl_Fromto.Enabled = false;
@@ -148,7 +183,7 @@ namespace ScreenCapture_Interface
             Timer = new System.Timers.Timer(1000);
             Timer.Elapsed += delegate
             {
-                CheckTimer();
+                CheckTimer(TimeCaptureMode, MutipleScreenMode, SavePath);
             };
             Timer.Start();
         }
@@ -182,52 +217,30 @@ namespace ScreenCapture_Interface
             Pl_TimeMode.Enabled = true;
         }
 
-        private void Hotkey_Capture(object sender, HotKeyEventArgs e)
-        {
-            if (!CheckSavePath(SavePath))
-            {
-                return;
-            }
-
-            ScreenCapture SC = new ScreenCapture();
-            switch (MutipleScreenMode)
-            {
-                case 0:
-                    SC.ScreenCapture_Single(SavePath);
-                    break;
-
-                case 1:
-                    SC.ScreenCapture_Multiple(SavePath);
-                    break;
-            }
-        }
-
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                HK.Dispose();                   //取消熱鍵
-                this.ShowInTaskbar = false;     //讓程式在工具列中隱藏
+                this.ShowInTaskbar = false; //讓程式在工具列中隱藏
                 RegisterHotKey();
             }
         }
 
-        private void NotifyIcon_min_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            HK.Dispose();                                //取消熱鍵
             this.ShowInTaskbar = true;                   //顯示在工具列
             this.WindowState = FormWindowState.Normal;   //還原視窗
             RegisterHotKey();
         }
 
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_ExitClick(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void RestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToolStripMenuItem_RestoreClick(object sender, EventArgs e)
         {
-            NotifyIcon_min_MouseDoubleClick(null, null);
+            NotifyIcon_MouseDoubleClick(null, null);
         }
 
         private void Rb_Combine_CheckedChanged(object sender, EventArgs e)

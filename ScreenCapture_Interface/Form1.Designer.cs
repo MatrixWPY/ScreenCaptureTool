@@ -128,7 +128,7 @@
             this.notifyIcon_min.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon_min.Icon")));
             this.notifyIcon_min.Text = "Screen Capture";
             this.notifyIcon_min.Visible = true;
-            this.notifyIcon_min.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_min_MouseDoubleClick);
+            this.notifyIcon_min.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             // 
             // contextMenu
             // 
@@ -144,7 +144,7 @@
             this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
             this.restoreToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.restoreToolStripMenuItem.Text = "Restore";
-            this.restoreToolStripMenuItem.Click += new System.EventHandler(this.RestoreToolStripMenuItem_Click);
+            this.restoreToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_RestoreClick);
             // 
             // toolStripSeparator1
             // 
@@ -156,7 +156,7 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItem_ExitClick);
             // 
             // Num_M
             // 
