@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Timers;
 
 namespace ScreenCapture_Interface
 {
     public class TimerSet
     {
-        private System.Timers.Timer Timer;
+        private Timer Timer;
         public DateTime SetTime;
         public DateTime SetTimeFrom;
         public DateTime SetTimeTo;
         public int Frequency;
         public DateTime CaptureTime;
-        public delegate void TimerInvoke(int iMutipleScreenMode, string strSavePath);
+        public delegate void TimerInvoke();
 
-        public void TimerStart(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath, TimerInvoke tiCallback)
+        public void TimerStart(int iTimeCaptureMode, TimerInvoke tiCallback)
         {
             if (null != Timer)
             {
@@ -21,7 +22,7 @@ namespace ScreenCapture_Interface
             Timer = new System.Timers.Timer(1000);
             Timer.Elapsed += delegate
             {
-                CheckTimer(iTimeCaptureMode, iMutipleScreenMode, strSavePath, tiCallback);
+                CheckTimer(iTimeCaptureMode, tiCallback);
             };
             Timer.Start();
         }
@@ -32,7 +33,12 @@ namespace ScreenCapture_Interface
             Timer.Dispose();
         }
 
-        private void CheckTimer(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath, TimerInvoke tiCallback)
+        public void Dispose()
+        {
+            TimerStop();
+        }
+
+        private void CheckTimer(int iTimeCaptureMode, TimerInvoke tiCallback)
         {
             DateTime dtNow = DateTime.Now;
 
@@ -41,7 +47,7 @@ namespace ScreenCapture_Interface
                 case 0:
                     if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
                     {
-                        tiCallback(iMutipleScreenMode, strSavePath);
+                        tiCallback();
                     }
                     break;
 
@@ -51,7 +57,7 @@ namespace ScreenCapture_Interface
                         if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
                         {
                             CaptureTime = CaptureTime.AddMinutes(Frequency);
-                            tiCallback(iMutipleScreenMode, strSavePath);
+                            tiCallback();
                         }
                     }
                     else

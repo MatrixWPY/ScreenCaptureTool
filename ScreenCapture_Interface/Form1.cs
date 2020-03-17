@@ -6,9 +6,10 @@ namespace ScreenCapture_Interface
 {
     public partial class Form1 : Form
     {
+        private static NotifyIcon NIcon;
         private static HotKey HK;
         private static TimerSet Timer;
-        private static NotifyIcon NIcon;
+        private static ScreenCapture SC;
         private static string SavePath = string.Empty;
         private static int MutipleScreenMode;
         private static int TimerCaptureMode;
@@ -24,7 +25,8 @@ namespace ScreenCapture_Interface
         ~Form1()
         {
             HK.Dispose(); //取消熱鍵
-            //Timer.Dispose();
+            //SC.Dispose();
+            Timer.Dispose();
             NIcon.Dispose();
         }
 
@@ -34,6 +36,7 @@ namespace ScreenCapture_Interface
             TimerCaptureMode = 0;
             NIcon = new NotifyIcon(this.components);
             Timer = new TimerSet();
+            SC = new ScreenCapture();
 
             //Btn_Folder_Click(null, null);
             //this.WindowState = FormWindowState.Minimized;
@@ -51,24 +54,23 @@ namespace ScreenCapture_Interface
         #endregion
 
         #region [Logic]
-        private void InvokeCapture(int iMutipleScreenMode, string strSavePath)
+        private void InvokeCapture()
         {
-            ScreenCapture SC = new ScreenCapture();
-            switch (iMutipleScreenMode)
+            switch (MutipleScreenMode)
             {
                 case 0:
-                    SC.ScreenCapture_Single(strSavePath);
+                    SC.ScreenCapture_Single(SavePath);
                     break;
 
                 case 1:
-                    SC.ScreenCapture_Multiple(strSavePath);
+                    SC.ScreenCapture_Multiple(SavePath);
                     break;
             }
         }
 
-        private void TimerStart(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath)
+        private void TimerStart()
         {
-            switch (iTimeCaptureMode)
+            switch (TimerCaptureMode)
             {
                 case 0:
                     Timer.SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
@@ -99,7 +101,7 @@ namespace ScreenCapture_Interface
             }
 
             TimerSet.TimerInvoke tiCallback = InvokeCapture;
-            Timer.TimerStart(iTimeCaptureMode, iMutipleScreenMode, strSavePath, tiCallback);
+            Timer.TimerStart(TimerCaptureMode, tiCallback);
         }
 
         private void TimerStop()
@@ -138,7 +140,7 @@ namespace ScreenCapture_Interface
                 return;
             }
 
-            InvokeCapture(MutipleScreenMode, SavePath);
+            InvokeCapture();
         }
 
         private void Btn_Folder_Click(object sender, EventArgs e)
@@ -168,7 +170,7 @@ namespace ScreenCapture_Interface
             Btn_Folder.Enabled = false;
             Pl_TimerMode.Enabled = false;
 
-            TimerStart(TimerCaptureMode, MutipleScreenMode, SavePath);
+            TimerStart();
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
