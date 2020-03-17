@@ -54,13 +54,13 @@
             this.Lbl_Freq1 = new System.Windows.Forms.Label();
             this.Num_FreM = new System.Windows.Forms.NumericUpDown();
             this.Pl_ScreenMode = new System.Windows.Forms.Panel();
-            this.Pl_Ontime = new System.Windows.Forms.Panel();
+            this.Pl_OnTime = new System.Windows.Forms.Panel();
             this.Lbl_OnTime = new System.Windows.Forms.Label();
             this.Pl_TimeMode = new System.Windows.Forms.Panel();
             this.Lbl_TimeMode = new System.Windows.Forms.Label();
             this.Rb_Fromto = new System.Windows.Forms.RadioButton();
             this.Rb_Ontime = new System.Windows.Forms.RadioButton();
-            this.Pl_Fromto = new System.Windows.Forms.Panel();
+            this.Pl_FromTo = new System.Windows.Forms.Panel();
             this.Lbl_Freq2 = new System.Windows.Forms.Label();
             this.Lbl_From = new System.Windows.Forms.Label();
             this.Lbl_To = new System.Windows.Forms.Label();
@@ -76,9 +76,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.Num_ToM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Num_FreM)).BeginInit();
             this.Pl_ScreenMode.SuspendLayout();
-            this.Pl_Ontime.SuspendLayout();
+            this.Pl_OnTime.SuspendLayout();
             this.Pl_TimeMode.SuspendLayout();
-            this.Pl_Fromto.SuspendLayout();
+            this.Pl_FromTo.SuspendLayout();
             this.Pl_SavePath.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -345,16 +345,16 @@
             this.Pl_ScreenMode.Size = new System.Drawing.Size(250, 30);
             this.Pl_ScreenMode.TabIndex = 2;
             // 
-            // Pl_Ontime
+            // Pl_OnTime
             // 
-            this.Pl_Ontime.Controls.Add(this.Lbl_OnTime);
-            this.Pl_Ontime.Controls.Add(this.Lbl_S1);
-            this.Pl_Ontime.Controls.Add(this.Num_M);
-            this.Pl_Ontime.Controls.Add(this.Num_H);
-            this.Pl_Ontime.Location = new System.Drawing.Point(3, 108);
-            this.Pl_Ontime.Name = "Pl_Ontime";
-            this.Pl_Ontime.Size = new System.Drawing.Size(250, 30);
-            this.Pl_Ontime.TabIndex = 4;
+            this.Pl_OnTime.Controls.Add(this.Lbl_OnTime);
+            this.Pl_OnTime.Controls.Add(this.Lbl_S1);
+            this.Pl_OnTime.Controls.Add(this.Num_M);
+            this.Pl_OnTime.Controls.Add(this.Num_H);
+            this.Pl_OnTime.Location = new System.Drawing.Point(3, 108);
+            this.Pl_OnTime.Name = "Pl_OnTime";
+            this.Pl_OnTime.Size = new System.Drawing.Size(250, 30);
+            this.Pl_OnTime.TabIndex = 4;
             // 
             // Lbl_OnTime
             // 
@@ -406,25 +406,26 @@
             this.Rb_Ontime.TabStop = true;
             this.Rb_Ontime.Text = "On-Time";
             this.Rb_Ontime.UseVisualStyleBackColor = true;
-            this.Rb_Ontime.CheckedChanged += new System.EventHandler(this.Rb_Ontime_CheckedChanged);
+            this.Rb_Ontime.CheckedChanged += new System.EventHandler(this.Rb_OnTime_CheckedChanged);
             // 
-            // Pl_Fromto
+            // Pl_FromTo
             // 
-            this.Pl_Fromto.Controls.Add(this.Lbl_Freq2);
-            this.Pl_Fromto.Controls.Add(this.Lbl_From);
-            this.Pl_Fromto.Controls.Add(this.Lbl_To);
-            this.Pl_Fromto.Controls.Add(this.Lbl_Freq1);
-            this.Pl_Fromto.Controls.Add(this.Num_FreM);
-            this.Pl_Fromto.Controls.Add(this.Num_ToH);
-            this.Pl_Fromto.Controls.Add(this.Num_ToM);
-            this.Pl_Fromto.Controls.Add(this.Lbl_S5);
-            this.Pl_Fromto.Controls.Add(this.Lbl_S7);
-            this.Pl_Fromto.Controls.Add(this.Num_FromM);
-            this.Pl_Fromto.Controls.Add(this.Num_FromH);
-            this.Pl_Fromto.Location = new System.Drawing.Point(3, 139);
-            this.Pl_Fromto.Name = "Pl_Fromto";
-            this.Pl_Fromto.Size = new System.Drawing.Size(339, 30);
-            this.Pl_Fromto.TabIndex = 5;
+            this.Pl_FromTo.Controls.Add(this.Lbl_Freq2);
+            this.Pl_FromTo.Controls.Add(this.Lbl_From);
+            this.Pl_FromTo.Controls.Add(this.Lbl_To);
+            this.Pl_FromTo.Controls.Add(this.Lbl_Freq1);
+            this.Pl_FromTo.Controls.Add(this.Num_FreM);
+            this.Pl_FromTo.Controls.Add(this.Num_ToH);
+            this.Pl_FromTo.Controls.Add(this.Num_ToM);
+            this.Pl_FromTo.Controls.Add(this.Lbl_S5);
+            this.Pl_FromTo.Controls.Add(this.Lbl_S7);
+            this.Pl_FromTo.Controls.Add(this.Num_FromM);
+            this.Pl_FromTo.Controls.Add(this.Num_FromH);
+            this.Pl_FromTo.Enabled = false;
+            this.Pl_FromTo.Location = new System.Drawing.Point(3, 139);
+            this.Pl_FromTo.Name = "Pl_FromTo";
+            this.Pl_FromTo.Size = new System.Drawing.Size(339, 30);
+            this.Pl_FromTo.TabIndex = 5;
             // 
             // Lbl_Freq2
             // 
@@ -484,9 +485,9 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(344, 171);
             this.Controls.Add(this.Pl_SavePath);
-            this.Controls.Add(this.Pl_Fromto);
+            this.Controls.Add(this.Pl_FromTo);
             this.Controls.Add(this.Pl_TimeMode);
-            this.Controls.Add(this.Pl_Ontime);
+            this.Controls.Add(this.Pl_OnTime);
             this.Controls.Add(this.Pl_ScreenMode);
             this.Controls.Add(this.Lbl_Tip);
             this.Controls.Add(this.Btn_Folder);
@@ -508,12 +509,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.Num_FreM)).EndInit();
             this.Pl_ScreenMode.ResumeLayout(false);
             this.Pl_ScreenMode.PerformLayout();
-            this.Pl_Ontime.ResumeLayout(false);
-            this.Pl_Ontime.PerformLayout();
+            this.Pl_OnTime.ResumeLayout(false);
+            this.Pl_OnTime.PerformLayout();
             this.Pl_TimeMode.ResumeLayout(false);
             this.Pl_TimeMode.PerformLayout();
-            this.Pl_Fromto.ResumeLayout(false);
-            this.Pl_Fromto.PerformLayout();
+            this.Pl_FromTo.ResumeLayout(false);
+            this.Pl_FromTo.PerformLayout();
             this.Pl_SavePath.ResumeLayout(false);
             this.Pl_SavePath.PerformLayout();
             this.ResumeLayout(false);
@@ -546,12 +547,12 @@
         private System.Windows.Forms.Label Lbl_Freq1;
         private System.Windows.Forms.NumericUpDown Num_FreM;
         private System.Windows.Forms.Panel Pl_ScreenMode;
-        private System.Windows.Forms.Panel Pl_Ontime;
+        private System.Windows.Forms.Panel Pl_OnTime;
         private System.Windows.Forms.Panel Pl_TimeMode;
         private System.Windows.Forms.Label Lbl_TimeMode;
         private System.Windows.Forms.RadioButton Rb_Fromto;
         private System.Windows.Forms.RadioButton Rb_Ontime;
-        private System.Windows.Forms.Panel Pl_Fromto;
+        private System.Windows.Forms.Panel Pl_FromTo;
         private System.Windows.Forms.Label Lbl_To;
         private System.Windows.Forms.Label Lbl_OnTime;
         private System.Windows.Forms.Label Lbl_From;

@@ -6,16 +6,12 @@ namespace ScreenCapture_Interface
 {
     public partial class Form1 : Form
     {
-        private HotKey HK;
-        private System.Timers.Timer Timer;
-        private string SavePath = string.Empty;
-        private int MutipleScreenMode;
-        private int TimeCaptureMode;
-        private DateTime SetTime;
-        private DateTime SetTimeFrom;
-        private DateTime SetTimeTo;
-        private DateTime CaptureTime;
-        private NotifyIcon NotifyIcon;
+        private static HotKey HK;
+        private static TimerSet Timer;
+        private static NotifyIcon NIcon;
+        private static string SavePath = string.Empty;
+        private static int MutipleScreenMode;
+        private static int TimeCaptureMode;
 
         #region [Initial]
         public Form1()
@@ -28,15 +24,16 @@ namespace ScreenCapture_Interface
         ~Form1()
         {
             HK.Dispose(); //取消熱鍵
-            NotifyIcon.Dispose();
-            Timer.Dispose();
+            //Timer.Dispose();
+            NIcon.Dispose();
         }
 
         protected void Initial()
         {
             MutipleScreenMode = 0;
             TimeCaptureMode = 0;
-            NotifyIcon = new NotifyIcon(this.components);
+            NIcon = new NotifyIcon(this.components);
+            Timer = new TimerSet();
 
             //Btn_Folder_Click(null, null);
             //this.WindowState = FormWindowState.Minimized;
@@ -54,36 +51,6 @@ namespace ScreenCapture_Interface
         #endregion
 
         #region [Logic]
-        private void CheckTimer(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath)
-        {
-            DateTime dtNow = DateTime.Now;
-
-            switch (iTimeCaptureMode)
-            {
-                case 0:
-                    if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
-                    {
-                        InvokeCapture(iMutipleScreenMode, strSavePath);
-                    }
-                    break;
-
-                case 1:
-                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
-                    {
-                        if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
-                        {
-                            CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                            InvokeCapture(iMutipleScreenMode, strSavePath);
-                        }
-                    }
-                    else
-                    {
-                        CaptureTime = SetTimeFrom.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                    }
-                    break;
-            }
-        }
-
         private void InvokeCapture(int iMutipleScreenMode, string strSavePath)
         {
             ScreenCapture SC = new ScreenCapture();
@@ -97,6 +64,48 @@ namespace ScreenCapture_Interface
                     SC.ScreenCapture_Multiple(strSavePath);
                     break;
             }
+        }
+
+        private void TimerStart(int iTimeCaptureMode, int iMutipleScreenMode, string strSavePath)
+        {
+            switch (iTimeCaptureMode)
+            {
+                case 0:
+                    Timer.SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
+                    Pl_OnTime.Enabled = false;
+                    break;
+
+                case 1:
+                    Timer.SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
+                    Timer.SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    if (Timer.SetTimeFrom >= Timer.SetTimeTo)
+                    {
+                        MessageBox.Show("Set time start >= end !");
+                        return;
+                    }
+
+                    Timer.Frequency = Convert.ToInt32(Num_FreM.Value);
+                    Timer.CaptureTime = Timer.SetTimeFrom.AddMinutes(Timer.Frequency);
+                    DateTime dtNow = DateTime.Now;
+                    if (dtNow > Timer.SetTimeFrom && dtNow < Timer.SetTimeTo)
+                    {
+                        while (dtNow >= Timer.CaptureTime)
+                        {
+                            Timer.CaptureTime = Timer.CaptureTime.AddMinutes(Timer.Frequency);
+                        }
+                    }
+
+                    Pl_FromTo.Enabled = false;
+                    break;
+            }
+
+            TimerSet.TimerInvoke tiCallback = InvokeCapture;
+            Timer.TimerStart(iTimeCaptureMode, iMutipleScreenMode, strSavePath, tiCallback);
+        }
+
+        private void TimerStop()
+        {
+            Timer.TimerStop();
         }
         #endregion
 
@@ -145,76 +154,33 @@ namespace ScreenCapture_Interface
                 return;
             }
 
-            switch (TimeCaptureMode)
-            {
-                case 0:
-                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
-                    Pl_Ontime.Enabled = false;
-                    break;
-
-                case 1:
-                    SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
-                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
-                    if (SetTimeFrom >= SetTimeTo)
-                    {
-                        MessageBox.Show("Set time start >= end !");
-                        return;
-                    }
-
-                    CaptureTime = SetTimeFrom.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                    DateTime dtNow = DateTime.Now;
-                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
-                    {
-                        while (dtNow >= CaptureTime)
-                        {
-                            CaptureTime = CaptureTime.AddMinutes(Convert.ToInt32(Num_FreM.Value));
-                        }
-                    }
-
-                    Pl_Fromto.Enabled = false;
-                    break;
-            }
-
             Btn_Start.Enabled = false;
             Btn_Stop.Enabled = true;
             Btn_Folder.Enabled = false;
             Pl_TimeMode.Enabled = false;
 
-            Timer = new System.Timers.Timer(1000);
-            Timer.Elapsed += delegate
-            {
-                CheckTimer(TimeCaptureMode, MutipleScreenMode, SavePath);
-            };
-            Timer.Start();
+            TimerStart(TimeCaptureMode, MutipleScreenMode, SavePath);
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
         {
-            Timer.Stop();
-            Timer.Dispose();
+            TimerStop();
+
+            Btn_Start.Enabled = true;
+            Btn_Stop.Enabled = false;
+            Btn_Folder.Enabled = true;
+            Pl_TimeMode.Enabled = true;
 
             switch (TimeCaptureMode)
             {
                 case 0:
-                    Pl_Ontime.Enabled = true;
-                    Num_H.Value = 0;
-                    Num_M.Value = 0;
+                    Pl_OnTime.Enabled = true;
                     break;
 
                 case 1:
-                    Pl_Fromto.Enabled = true;
-                    Num_FromH.Value = 0;
-                    Num_FromM.Value = 0;
-                    Num_ToH.Value = 0;
-                    Num_ToM.Value = 0;
-                    Num_FreM.Value = 1;
+                    Pl_FromTo.Enabled = true;
                     break;
             }
-
-            Btn_Stop.Enabled = false;
-            Btn_Start.Enabled = true;
-            Btn_Folder.Enabled = true;
-            Pl_TimeMode.Enabled = true;
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
@@ -255,27 +221,28 @@ namespace ScreenCapture_Interface
             }
         }
 
-        private void Rb_Ontime_CheckedChanged(object sender, EventArgs e)
+        private void Rb_OnTime_CheckedChanged(object sender, EventArgs e)
         {
             if (Rb_Ontime.Checked)
             {
                 TimeCaptureMode = 0;
-                Pl_Ontime.Enabled = true;
-                Pl_Fromto.Enabled = false;
-                Num_H.Value = 0;
-                Num_M.Value = 0;
+                Pl_OnTime.Enabled = true;
+                Pl_FromTo.Enabled = false;
             }
             else
             {
                 TimeCaptureMode = 1;
-                Pl_Ontime.Enabled = false;
-                Pl_Fromto.Enabled = true;
-                Num_FromH.Value = 0;
-                Num_FromM.Value = 0;
-                Num_ToH.Value = 0;
-                Num_ToM.Value = 0;
-                Num_FreM.Value = 1;
+                Pl_OnTime.Enabled = false;
+                Pl_FromTo.Enabled = true;
             }
+
+            Num_H.Value = 0;
+            Num_M.Value = 0;
+            Num_FromH.Value = 0;
+            Num_FromM.Value = 0;
+            Num_ToH.Value = 0;
+            Num_ToM.Value = 0;
+            Num_FreM.Value = 1;
         }
 
         private void SelectAll(NumericUpDown numericUpDown)
