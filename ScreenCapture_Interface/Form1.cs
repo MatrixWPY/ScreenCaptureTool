@@ -11,7 +11,7 @@ namespace ScreenCapture_Interface
         private static NotifyIcon NIcon;
         private static string SavePath = string.Empty;
         private static int MutipleScreenMode;
-        private static int TimeCaptureMode;
+        private static int TimerCaptureMode;
 
         #region [Initial]
         public Form1()
@@ -31,7 +31,7 @@ namespace ScreenCapture_Interface
         protected void Initial()
         {
             MutipleScreenMode = 0;
-            TimeCaptureMode = 0;
+            TimerCaptureMode = 0;
             NIcon = new NotifyIcon(this.components);
             Timer = new TimerSet();
 
@@ -78,9 +78,8 @@ namespace ScreenCapture_Interface
                 case 1:
                     Timer.SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
                     Timer.SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
-                    if (Timer.SetTimeFrom >= Timer.SetTimeTo)
+                    if (!CheckSetTimeFromTo(Timer.SetTimeFrom, Timer.SetTimeTo))
                     {
-                        MessageBox.Show("Set time start >= end !");
                         return;
                     }
 
@@ -115,6 +114,16 @@ namespace ScreenCapture_Interface
             if (String.IsNullOrWhiteSpace(strPath) || !Directory.Exists(strPath))
             {
                 MessageBox.Show("Save Path Not Exist !");
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckSetTimeFromTo(DateTime dtFrom, DateTime dtTo)
+        {
+            if (dtFrom >= dtTo)
+            {
+                MessageBox.Show("Timer From >= To !");
                 return false;
             }
             return true;
@@ -157,9 +166,9 @@ namespace ScreenCapture_Interface
             Btn_Start.Enabled = false;
             Btn_Stop.Enabled = true;
             Btn_Folder.Enabled = false;
-            Pl_TimeMode.Enabled = false;
+            Pl_TimerMode.Enabled = false;
 
-            TimerStart(TimeCaptureMode, MutipleScreenMode, SavePath);
+            TimerStart(TimerCaptureMode, MutipleScreenMode, SavePath);
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
@@ -169,9 +178,9 @@ namespace ScreenCapture_Interface
             Btn_Start.Enabled = true;
             Btn_Stop.Enabled = false;
             Btn_Folder.Enabled = true;
-            Pl_TimeMode.Enabled = true;
+            Pl_TimerMode.Enabled = true;
 
-            switch (TimeCaptureMode)
+            switch (TimerCaptureMode)
             {
                 case 0:
                     Pl_OnTime.Enabled = true;
@@ -223,15 +232,15 @@ namespace ScreenCapture_Interface
 
         private void Rb_OnTime_CheckedChanged(object sender, EventArgs e)
         {
-            if (Rb_Ontime.Checked)
+            if (Rb_OnTime.Checked)
             {
-                TimeCaptureMode = 0;
+                TimerCaptureMode = 0;
                 Pl_OnTime.Enabled = true;
                 Pl_FromTo.Enabled = false;
             }
             else
             {
-                TimeCaptureMode = 1;
+                TimerCaptureMode = 1;
                 Pl_OnTime.Enabled = false;
                 Pl_FromTo.Enabled = true;
             }

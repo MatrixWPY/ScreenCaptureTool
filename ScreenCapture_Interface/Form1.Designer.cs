@@ -56,10 +56,10 @@
             this.Pl_ScreenMode = new System.Windows.Forms.Panel();
             this.Pl_OnTime = new System.Windows.Forms.Panel();
             this.Lbl_OnTime = new System.Windows.Forms.Label();
-            this.Pl_TimeMode = new System.Windows.Forms.Panel();
-            this.Lbl_TimeMode = new System.Windows.Forms.Label();
-            this.Rb_Fromto = new System.Windows.Forms.RadioButton();
-            this.Rb_Ontime = new System.Windows.Forms.RadioButton();
+            this.Pl_TimerMode = new System.Windows.Forms.Panel();
+            this.Lbl_TimerMode = new System.Windows.Forms.Label();
+            this.Rb_FromTo = new System.Windows.Forms.RadioButton();
+            this.Rb_OnTime = new System.Windows.Forms.RadioButton();
             this.Pl_FromTo = new System.Windows.Forms.Panel();
             this.Lbl_Freq2 = new System.Windows.Forms.Label();
             this.Lbl_From = new System.Windows.Forms.Label();
@@ -77,7 +77,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Num_FreM)).BeginInit();
             this.Pl_ScreenMode.SuspendLayout();
             this.Pl_OnTime.SuspendLayout();
-            this.Pl_TimeMode.SuspendLayout();
+            this.Pl_TimerMode.SuspendLayout();
             this.Pl_FromTo.SuspendLayout();
             this.Pl_SavePath.SuspendLayout();
             this.SuspendLayout();
@@ -365,48 +365,48 @@
             this.Lbl_OnTime.TabIndex = 28;
             this.Lbl_OnTime.Text = "On-Time";
             // 
-            // Pl_TimeMode
+            // Pl_TimerMode
             // 
-            this.Pl_TimeMode.Controls.Add(this.Lbl_TimeMode);
-            this.Pl_TimeMode.Controls.Add(this.Rb_Fromto);
-            this.Pl_TimeMode.Controls.Add(this.Rb_Ontime);
-            this.Pl_TimeMode.Location = new System.Drawing.Point(3, 77);
-            this.Pl_TimeMode.Name = "Pl_TimeMode";
-            this.Pl_TimeMode.Size = new System.Drawing.Size(250, 30);
-            this.Pl_TimeMode.TabIndex = 3;
+            this.Pl_TimerMode.Controls.Add(this.Lbl_TimerMode);
+            this.Pl_TimerMode.Controls.Add(this.Rb_FromTo);
+            this.Pl_TimerMode.Controls.Add(this.Rb_OnTime);
+            this.Pl_TimerMode.Location = new System.Drawing.Point(3, 77);
+            this.Pl_TimerMode.Name = "Pl_TimerMode";
+            this.Pl_TimerMode.Size = new System.Drawing.Size(250, 30);
+            this.Pl_TimerMode.TabIndex = 3;
             // 
-            // Lbl_TimeMode
+            // Lbl_TimerMode
             // 
-            this.Lbl_TimeMode.AutoSize = true;
-            this.Lbl_TimeMode.Location = new System.Drawing.Point(2, 9);
-            this.Lbl_TimeMode.Name = "Lbl_TimeMode";
-            this.Lbl_TimeMode.Size = new System.Drawing.Size(99, 12);
-            this.Lbl_TimeMode.TabIndex = 27;
-            this.Lbl_TimeMode.Text = "Time Capture Mode";
+            this.Lbl_TimerMode.AutoSize = true;
+            this.Lbl_TimerMode.Location = new System.Drawing.Point(2, 9);
+            this.Lbl_TimerMode.Name = "Lbl_TimerMode";
+            this.Lbl_TimerMode.Size = new System.Drawing.Size(103, 12);
+            this.Lbl_TimerMode.TabIndex = 27;
+            this.Lbl_TimerMode.Text = "Timer Capture Mode";
             // 
-            // Rb_Fromto
+            // Rb_FromTo
             // 
-            this.Rb_Fromto.AutoSize = true;
-            this.Rb_Fromto.Location = new System.Drawing.Point(184, 7);
-            this.Rb_Fromto.Name = "Rb_Fromto";
-            this.Rb_Fromto.Size = new System.Drawing.Size(65, 16);
-            this.Rb_Fromto.TabIndex = 5;
-            this.Rb_Fromto.TabStop = true;
-            this.Rb_Fromto.Text = "From-To";
-            this.Rb_Fromto.UseVisualStyleBackColor = true;
+            this.Rb_FromTo.AutoSize = true;
+            this.Rb_FromTo.Location = new System.Drawing.Point(184, 7);
+            this.Rb_FromTo.Name = "Rb_FromTo";
+            this.Rb_FromTo.Size = new System.Drawing.Size(65, 16);
+            this.Rb_FromTo.TabIndex = 5;
+            this.Rb_FromTo.TabStop = true;
+            this.Rb_FromTo.Text = "From-To";
+            this.Rb_FromTo.UseVisualStyleBackColor = true;
             // 
-            // Rb_Ontime
+            // Rb_OnTime
             // 
-            this.Rb_Ontime.AutoSize = true;
-            this.Rb_Ontime.Checked = true;
-            this.Rb_Ontime.Location = new System.Drawing.Point(115, 7);
-            this.Rb_Ontime.Name = "Rb_Ontime";
-            this.Rb_Ontime.Size = new System.Drawing.Size(65, 16);
-            this.Rb_Ontime.TabIndex = 4;
-            this.Rb_Ontime.TabStop = true;
-            this.Rb_Ontime.Text = "On-Time";
-            this.Rb_Ontime.UseVisualStyleBackColor = true;
-            this.Rb_Ontime.CheckedChanged += new System.EventHandler(this.Rb_OnTime_CheckedChanged);
+            this.Rb_OnTime.AutoSize = true;
+            this.Rb_OnTime.Checked = true;
+            this.Rb_OnTime.Location = new System.Drawing.Point(115, 7);
+            this.Rb_OnTime.Name = "Rb_OnTime";
+            this.Rb_OnTime.Size = new System.Drawing.Size(65, 16);
+            this.Rb_OnTime.TabIndex = 4;
+            this.Rb_OnTime.TabStop = true;
+            this.Rb_OnTime.Text = "On-Time";
+            this.Rb_OnTime.UseVisualStyleBackColor = true;
+            this.Rb_OnTime.CheckedChanged += new System.EventHandler(this.Rb_OnTime_CheckedChanged);
             // 
             // Pl_FromTo
             // 
@@ -486,7 +486,7 @@
             this.ClientSize = new System.Drawing.Size(344, 171);
             this.Controls.Add(this.Pl_SavePath);
             this.Controls.Add(this.Pl_FromTo);
-            this.Controls.Add(this.Pl_TimeMode);
+            this.Controls.Add(this.Pl_TimerMode);
             this.Controls.Add(this.Pl_OnTime);
             this.Controls.Add(this.Pl_ScreenMode);
             this.Controls.Add(this.Lbl_Tip);
@@ -511,8 +511,8 @@
             this.Pl_ScreenMode.PerformLayout();
             this.Pl_OnTime.ResumeLayout(false);
             this.Pl_OnTime.PerformLayout();
-            this.Pl_TimeMode.ResumeLayout(false);
-            this.Pl_TimeMode.PerformLayout();
+            this.Pl_TimerMode.ResumeLayout(false);
+            this.Pl_TimerMode.PerformLayout();
             this.Pl_FromTo.ResumeLayout(false);
             this.Pl_FromTo.PerformLayout();
             this.Pl_SavePath.ResumeLayout(false);
@@ -548,10 +548,10 @@
         private System.Windows.Forms.NumericUpDown Num_FreM;
         private System.Windows.Forms.Panel Pl_ScreenMode;
         private System.Windows.Forms.Panel Pl_OnTime;
-        private System.Windows.Forms.Panel Pl_TimeMode;
-        private System.Windows.Forms.Label Lbl_TimeMode;
-        private System.Windows.Forms.RadioButton Rb_Fromto;
-        private System.Windows.Forms.RadioButton Rb_Ontime;
+        private System.Windows.Forms.Panel Pl_TimerMode;
+        private System.Windows.Forms.Label Lbl_TimerMode;
+        private System.Windows.Forms.RadioButton Rb_FromTo;
+        private System.Windows.Forms.RadioButton Rb_OnTime;
         private System.Windows.Forms.Panel Pl_FromTo;
         private System.Windows.Forms.Label Lbl_To;
         private System.Windows.Forms.Label Lbl_OnTime;
