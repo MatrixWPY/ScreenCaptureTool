@@ -67,6 +67,8 @@
             this.Pl_SavePath = new System.Windows.Forms.Panel();
             this.Txt_SavePath = new System.Windows.Forms.TextBox();
             this.Lbl_SavePath = new System.Windows.Forms.Label();
+            this.Gb_Timer = new System.Windows.Forms.GroupBox();
+            this.Gb_Setting = new System.Windows.Forms.GroupBox();
             this.contextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Num_M)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Num_H)).BeginInit();
@@ -80,13 +82,15 @@
             this.Pl_TimerMode.SuspendLayout();
             this.Pl_FromTo.SuspendLayout();
             this.Pl_SavePath.SuspendLayout();
+            this.Gb_Timer.SuspendLayout();
+            this.Gb_Setting.SuspendLayout();
             this.SuspendLayout();
             // 
             // Btn_Start
             // 
-            this.Btn_Start.Location = new System.Drawing.Point(275, 80);
+            this.Btn_Start.Location = new System.Drawing.Point(256, 18);
             this.Btn_Start.Name = "Btn_Start";
-            this.Btn_Start.Size = new System.Drawing.Size(44, 25);
+            this.Btn_Start.Size = new System.Drawing.Size(75, 25);
             this.Btn_Start.TabIndex = 13;
             this.Btn_Start.Text = "Start";
             this.Btn_Start.UseVisualStyleBackColor = true;
@@ -95,9 +99,9 @@
             // Btn_Stop
             // 
             this.Btn_Stop.Enabled = false;
-            this.Btn_Stop.Location = new System.Drawing.Point(275, 109);
+            this.Btn_Stop.Location = new System.Drawing.Point(256, 49);
             this.Btn_Stop.Name = "Btn_Stop";
-            this.Btn_Stop.Size = new System.Drawing.Size(44, 25);
+            this.Btn_Stop.Size = new System.Drawing.Size(75, 25);
             this.Btn_Stop.TabIndex = 14;
             this.Btn_Stop.Text = "Stop";
             this.Btn_Stop.UseVisualStyleBackColor = true;
@@ -105,9 +109,9 @@
             // 
             // Btn_Folder
             // 
-            this.Btn_Folder.Location = new System.Drawing.Point(258, 17);
+            this.Btn_Folder.Location = new System.Drawing.Point(256, 17);
             this.Btn_Folder.Name = "Btn_Folder";
-            this.Btn_Folder.Size = new System.Drawing.Size(80, 25);
+            this.Btn_Folder.Size = new System.Drawing.Size(75, 25);
             this.Btn_Folder.TabIndex = 1;
             this.Btn_Folder.Text = "Select Folder";
             this.Btn_Folder.UseVisualStyleBackColor = true;
@@ -186,11 +190,10 @@
             // 
             // Lbl_Tip
             // 
-            this.Lbl_Tip.AutoSize = true;
             this.Lbl_Tip.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.Lbl_Tip.Location = new System.Drawing.Point(3, 3);
+            this.Lbl_Tip.Location = new System.Drawing.Point(5, 4);
             this.Lbl_Tip.Name = "Lbl_Tip";
-            this.Lbl_Tip.Size = new System.Drawing.Size(168, 12);
+            this.Lbl_Tip.Size = new System.Drawing.Size(335, 15);
             this.Lbl_Tip.TabIndex = 8;
             this.Lbl_Tip.Text = "[Press PrintScreen Key / Set Timer]";
             this.Lbl_Tip.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -199,7 +202,7 @@
             // 
             this.Rb_Combine.AutoSize = true;
             this.Rb_Combine.Checked = true;
-            this.Rb_Combine.Location = new System.Drawing.Point(115, 7);
+            this.Rb_Combine.Location = new System.Drawing.Point(101, 7);
             this.Rb_Combine.Name = "Rb_Combine";
             this.Rb_Combine.Size = new System.Drawing.Size(66, 16);
             this.Rb_Combine.TabIndex = 2;
@@ -211,7 +214,7 @@
             // Rb_Seperate
             // 
             this.Rb_Seperate.AutoSize = true;
-            this.Rb_Seperate.Location = new System.Drawing.Point(184, 7);
+            this.Rb_Seperate.Location = new System.Drawing.Point(170, 7);
             this.Rb_Seperate.Name = "Rb_Seperate";
             this.Rb_Seperate.Size = new System.Drawing.Size(62, 16);
             this.Rb_Seperate.TabIndex = 3;
@@ -222,15 +225,15 @@
             // Lbl_Mode
             // 
             this.Lbl_Mode.AutoSize = true;
-            this.Lbl_Mode.Location = new System.Drawing.Point(2, 8);
+            this.Lbl_Mode.Location = new System.Drawing.Point(3, 8);
             this.Lbl_Mode.Name = "Lbl_Mode";
-            this.Lbl_Mode.Size = new System.Drawing.Size(108, 12);
+            this.Lbl_Mode.Size = new System.Drawing.Size(78, 12);
             this.Lbl_Mode.TabIndex = 11;
-            this.Lbl_Mode.Text = "Multiple Screen Mode";
+            this.Lbl_Mode.Text = "Multiple Screen";
             // 
             // Num_FromH
             // 
-            this.Num_FromH.Location = new System.Drawing.Point(36, 4);
+            this.Num_FromH.Location = new System.Drawing.Point(55, 4);
             this.Num_FromH.Maximum = new decimal(new int[] {
             23,
             0,
@@ -243,7 +246,7 @@
             // 
             // Num_FromM
             // 
-            this.Num_FromM.Location = new System.Drawing.Point(81, 4);
+            this.Num_FromM.Location = new System.Drawing.Point(100, 4);
             this.Num_FromM.Maximum = new decimal(new int[] {
             59,
             0,
@@ -257,7 +260,7 @@
             // Lbl_S5
             // 
             this.Lbl_S5.AutoSize = true;
-            this.Lbl_S5.Location = new System.Drawing.Point(70, 9);
+            this.Lbl_S5.Location = new System.Drawing.Point(89, 9);
             this.Lbl_S5.Name = "Lbl_S5";
             this.Lbl_S5.Size = new System.Drawing.Size(8, 12);
             this.Lbl_S5.TabIndex = 15;
@@ -265,7 +268,7 @@
             // 
             // Num_ToH
             // 
-            this.Num_ToH.Location = new System.Drawing.Point(136, 4);
+            this.Num_ToH.Location = new System.Drawing.Point(171, 4);
             this.Num_ToH.Maximum = new decimal(new int[] {
             23,
             0,
@@ -278,7 +281,7 @@
             // 
             // Num_ToM
             // 
-            this.Num_ToM.Location = new System.Drawing.Point(181, 4);
+            this.Num_ToM.Location = new System.Drawing.Point(216, 4);
             this.Num_ToM.Maximum = new decimal(new int[] {
             59,
             0,
@@ -292,7 +295,7 @@
             // Lbl_S7
             // 
             this.Lbl_S7.AutoSize = true;
-            this.Lbl_S7.Location = new System.Drawing.Point(170, 9);
+            this.Lbl_S7.Location = new System.Drawing.Point(205, 9);
             this.Lbl_S7.Name = "Lbl_S7";
             this.Lbl_S7.Size = new System.Drawing.Size(8, 12);
             this.Lbl_S7.TabIndex = 20;
@@ -301,15 +304,15 @@
             // Lbl_Freq1
             // 
             this.Lbl_Freq1.AutoSize = true;
-            this.Lbl_Freq1.Location = new System.Drawing.Point(214, 9);
+            this.Lbl_Freq1.Location = new System.Drawing.Point(3, 37);
             this.Lbl_Freq1.Name = "Lbl_Freq1";
-            this.Lbl_Freq1.Size = new System.Drawing.Size(46, 12);
+            this.Lbl_Freq1.Size = new System.Drawing.Size(33, 12);
             this.Lbl_Freq1.TabIndex = 25;
-            this.Lbl_Freq1.Text = "-> Every";
+            this.Lbl_Freq1.Text = "Every";
             // 
             // Num_FreM
             // 
-            this.Num_FreM.Location = new System.Drawing.Point(261, 4);
+            this.Num_FreM.Location = new System.Drawing.Point(55, 32);
             this.Num_FreM.Maximum = new decimal(new int[] {
             60,
             0,
@@ -335,7 +338,7 @@
             this.Pl_ScreenMode.Controls.Add(this.Lbl_Mode);
             this.Pl_ScreenMode.Controls.Add(this.Rb_Seperate);
             this.Pl_ScreenMode.Controls.Add(this.Rb_Combine);
-            this.Pl_ScreenMode.Location = new System.Drawing.Point(3, 46);
+            this.Pl_ScreenMode.Location = new System.Drawing.Point(4, 46);
             this.Pl_ScreenMode.Name = "Pl_ScreenMode";
             this.Pl_ScreenMode.Size = new System.Drawing.Size(250, 30);
             this.Pl_ScreenMode.TabIndex = 2;
@@ -346,7 +349,7 @@
             this.Pl_OnTime.Controls.Add(this.Lbl_S1);
             this.Pl_OnTime.Controls.Add(this.Num_M);
             this.Pl_OnTime.Controls.Add(this.Num_H);
-            this.Pl_OnTime.Location = new System.Drawing.Point(3, 108);
+            this.Pl_OnTime.Location = new System.Drawing.Point(4, 46);
             this.Pl_OnTime.Name = "Pl_OnTime";
             this.Pl_OnTime.Size = new System.Drawing.Size(250, 30);
             this.Pl_OnTime.TabIndex = 4;
@@ -365,7 +368,7 @@
             this.Pl_TimerMode.Controls.Add(this.Lbl_TimerMode);
             this.Pl_TimerMode.Controls.Add(this.Rb_FromTo);
             this.Pl_TimerMode.Controls.Add(this.Rb_OnTime);
-            this.Pl_TimerMode.Location = new System.Drawing.Point(3, 77);
+            this.Pl_TimerMode.Location = new System.Drawing.Point(4, 15);
             this.Pl_TimerMode.Name = "Pl_TimerMode";
             this.Pl_TimerMode.Size = new System.Drawing.Size(250, 30);
             this.Pl_TimerMode.TabIndex = 3;
@@ -373,16 +376,16 @@
             // Lbl_TimerMode
             // 
             this.Lbl_TimerMode.AutoSize = true;
-            this.Lbl_TimerMode.Location = new System.Drawing.Point(2, 9);
+            this.Lbl_TimerMode.Location = new System.Drawing.Point(3, 9);
             this.Lbl_TimerMode.Name = "Lbl_TimerMode";
-            this.Lbl_TimerMode.Size = new System.Drawing.Size(103, 12);
+            this.Lbl_TimerMode.Size = new System.Drawing.Size(63, 12);
             this.Lbl_TimerMode.TabIndex = 27;
-            this.Lbl_TimerMode.Text = "Timer Capture Mode";
+            this.Lbl_TimerMode.Text = "Timer Mode";
             // 
             // Rb_FromTo
             // 
             this.Rb_FromTo.AutoSize = true;
-            this.Rb_FromTo.Location = new System.Drawing.Point(184, 7);
+            this.Rb_FromTo.Location = new System.Drawing.Point(170, 7);
             this.Rb_FromTo.Name = "Rb_FromTo";
             this.Rb_FromTo.Size = new System.Drawing.Size(65, 16);
             this.Rb_FromTo.TabIndex = 5;
@@ -394,7 +397,7 @@
             // 
             this.Rb_OnTime.AutoSize = true;
             this.Rb_OnTime.Checked = true;
-            this.Rb_OnTime.Location = new System.Drawing.Point(115, 7);
+            this.Rb_OnTime.Location = new System.Drawing.Point(101, 7);
             this.Rb_OnTime.Name = "Rb_OnTime";
             this.Rb_OnTime.Size = new System.Drawing.Size(65, 16);
             this.Rb_OnTime.TabIndex = 4;
@@ -417,15 +420,15 @@
             this.Pl_FromTo.Controls.Add(this.Num_FromM);
             this.Pl_FromTo.Controls.Add(this.Num_FromH);
             this.Pl_FromTo.Enabled = false;
-            this.Pl_FromTo.Location = new System.Drawing.Point(3, 139);
+            this.Pl_FromTo.Location = new System.Drawing.Point(4, 77);
             this.Pl_FromTo.Name = "Pl_FromTo";
-            this.Pl_FromTo.Size = new System.Drawing.Size(339, 30);
+            this.Pl_FromTo.Size = new System.Drawing.Size(250, 60);
             this.Pl_FromTo.TabIndex = 5;
             // 
             // Lbl_Freq2
             // 
             this.Lbl_Freq2.AutoSize = true;
-            this.Lbl_Freq2.Location = new System.Drawing.Point(294, 9);
+            this.Lbl_Freq2.Location = new System.Drawing.Point(95, 37);
             this.Lbl_Freq2.Name = "Lbl_Freq2";
             this.Lbl_Freq2.Size = new System.Drawing.Size(42, 12);
             this.Lbl_Freq2.TabIndex = 33;
@@ -443,7 +446,7 @@
             // Lbl_To
             // 
             this.Lbl_To.AutoSize = true;
-            this.Lbl_To.Location = new System.Drawing.Point(115, 8);
+            this.Lbl_To.Location = new System.Drawing.Point(142, 8);
             this.Lbl_To.Name = "Lbl_To";
             this.Lbl_To.Size = new System.Drawing.Size(18, 12);
             this.Lbl_To.TabIndex = 31;
@@ -453,7 +456,7 @@
             // 
             this.Pl_SavePath.Controls.Add(this.Txt_SavePath);
             this.Pl_SavePath.Controls.Add(this.Lbl_SavePath);
-            this.Pl_SavePath.Location = new System.Drawing.Point(3, 15);
+            this.Pl_SavePath.Location = new System.Drawing.Point(4, 15);
             this.Pl_SavePath.Name = "Pl_SavePath";
             this.Pl_SavePath.Size = new System.Drawing.Size(250, 30);
             this.Pl_SavePath.TabIndex = 20;
@@ -475,19 +478,39 @@
             this.Lbl_SavePath.TabIndex = 11;
             this.Lbl_SavePath.Text = "Save Path";
             // 
+            // Gb_Timer
+            // 
+            this.Gb_Timer.Controls.Add(this.Btn_Start);
+            this.Gb_Timer.Controls.Add(this.Btn_Stop);
+            this.Gb_Timer.Controls.Add(this.Pl_TimerMode);
+            this.Gb_Timer.Controls.Add(this.Pl_OnTime);
+            this.Gb_Timer.Controls.Add(this.Pl_FromTo);
+            this.Gb_Timer.Location = new System.Drawing.Point(4, 100);
+            this.Gb_Timer.Name = "Gb_Timer";
+            this.Gb_Timer.Size = new System.Drawing.Size(335, 140);
+            this.Gb_Timer.TabIndex = 23;
+            this.Gb_Timer.TabStop = false;
+            this.Gb_Timer.Text = "Timer Capture";
+            // 
+            // Gb_Setting
+            // 
+            this.Gb_Setting.Controls.Add(this.Pl_ScreenMode);
+            this.Gb_Setting.Controls.Add(this.Btn_Folder);
+            this.Gb_Setting.Controls.Add(this.Pl_SavePath);
+            this.Gb_Setting.Location = new System.Drawing.Point(4, 16);
+            this.Gb_Setting.Name = "Gb_Setting";
+            this.Gb_Setting.Size = new System.Drawing.Size(335, 80);
+            this.Gb_Setting.TabIndex = 22;
+            this.Gb_Setting.TabStop = false;
+            this.Gb_Setting.Text = "Capture Setting";
+            // 
             // Form1
             // 
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(344, 171);
-            this.Controls.Add(this.Pl_SavePath);
-            this.Controls.Add(this.Pl_FromTo);
-            this.Controls.Add(this.Pl_TimerMode);
-            this.Controls.Add(this.Pl_OnTime);
-            this.Controls.Add(this.Pl_ScreenMode);
+            this.ClientSize = new System.Drawing.Size(344, 241);
+            this.Controls.Add(this.Gb_Setting);
+            this.Controls.Add(this.Gb_Timer);
             this.Controls.Add(this.Lbl_Tip);
-            this.Controls.Add(this.Btn_Folder);
-            this.Controls.Add(this.Btn_Stop);
-            this.Controls.Add(this.Btn_Start);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
@@ -513,8 +536,9 @@
             this.Pl_FromTo.PerformLayout();
             this.Pl_SavePath.ResumeLayout(false);
             this.Pl_SavePath.PerformLayout();
+            this.Gb_Timer.ResumeLayout(false);
+            this.Gb_Setting.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -556,6 +580,8 @@
         private System.Windows.Forms.TextBox Txt_SavePath;
         private System.Windows.Forms.Label Lbl_SavePath;
         private System.Windows.Forms.Label Lbl_Freq2;
+        private System.Windows.Forms.GroupBox Gb_Timer;
+        private System.Windows.Forms.GroupBox Gb_Setting;
     }
 }
 
