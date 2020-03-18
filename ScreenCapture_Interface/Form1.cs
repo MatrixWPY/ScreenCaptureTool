@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace ScreenCapture_Interface
@@ -11,13 +12,31 @@ namespace ScreenCapture_Interface
         private static TimerSet TS;
         private static ScreenCapture SC;
         private static string SavePath = string.Empty;
-        private static int MutipleScreenMode;
-        private static int TimerCaptureMode;
+        private static emMutipleScreenMode MutipleScreenMode;
+        private static emTimerCaptureMode TimerCaptureMode;
         private static DateTime SetTime;
         private static DateTime SetTimeFrom;
         private static DateTime SetTimeTo;
         private static int Frequency;
         private static DateTime CaptureTime;
+
+        private enum emMutipleScreenMode
+        {
+            [EnumMember]
+            Combine = 0,
+
+            [EnumMember]
+            Seperate = 1
+        }
+
+        private enum emTimerCaptureMode
+        {
+            [EnumMember]
+            OnTime = 0,
+
+            [EnumMember]
+            FromTo = 1
+        }
 
         #region [Initial]
         public Form1()
@@ -29,8 +48,8 @@ namespace ScreenCapture_Interface
 
         protected void Initial()
         {
-            MutipleScreenMode = 0;
-            TimerCaptureMode = 0;
+            MutipleScreenMode = emMutipleScreenMode.Combine;
+            TimerCaptureMode = emTimerCaptureMode.OnTime;
             NIcon = new NotifyIcon(this.components);
             TS = new TimerSet();
             SC = new ScreenCapture();
@@ -55,11 +74,11 @@ namespace ScreenCapture_Interface
         {
             switch (MutipleScreenMode)
             {
-                case 0:
+                case emMutipleScreenMode.Combine:
                     SC.ScreenCapture_Single(SavePath);
                     break;
 
-                case 1:
+                case emMutipleScreenMode.Seperate:
                     SC.ScreenCapture_Multiple(SavePath);
                     break;
             }
@@ -69,12 +88,12 @@ namespace ScreenCapture_Interface
         {
             switch (TimerCaptureMode)
             {
-                case 0:
+                case emTimerCaptureMode.OnTime:
                     SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
                     Pl_OnTime.Enabled = false;
                     break;
 
-                case 1:
+                case emTimerCaptureMode.FromTo:
                     SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
                     SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
                     if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
@@ -111,14 +130,14 @@ namespace ScreenCapture_Interface
 
             switch (TimerCaptureMode)
             {
-                case 0:
+                case emTimerCaptureMode.OnTime:
                     if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
                     {
                         InvokeCapture();
                     }
                     break;
 
-                case 1:
+                case emTimerCaptureMode.FromTo:
                     if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
                     {
                         if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
@@ -215,11 +234,11 @@ namespace ScreenCapture_Interface
 
             switch (TimerCaptureMode)
             {
-                case 0:
+                case emTimerCaptureMode.OnTime:
                     Pl_OnTime.Enabled = true;
                     break;
 
-                case 1:
+                case emTimerCaptureMode.FromTo:
                     Pl_FromTo.Enabled = true;
                     break;
             }
@@ -229,11 +248,11 @@ namespace ScreenCapture_Interface
         {
             if (Rb_Combine.Checked)
             {
-                MutipleScreenMode = 0;
+                MutipleScreenMode = emMutipleScreenMode.Combine;
             }
             else
             {
-                MutipleScreenMode = 1;
+                MutipleScreenMode = emMutipleScreenMode.Seperate;
             }
         }
 
@@ -241,13 +260,13 @@ namespace ScreenCapture_Interface
         {
             if (Rb_OnTime.Checked)
             {
-                TimerCaptureMode = 0;
+                TimerCaptureMode = emTimerCaptureMode.OnTime;
                 Pl_OnTime.Enabled = true;
                 Pl_FromTo.Enabled = false;
             }
             else
             {
-                TimerCaptureMode = 1;
+                TimerCaptureMode = emTimerCaptureMode.FromTo;
                 Pl_OnTime.Enabled = false;
                 Pl_FromTo.Enabled = true;
             }
