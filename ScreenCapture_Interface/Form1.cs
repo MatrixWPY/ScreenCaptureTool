@@ -90,7 +90,6 @@ namespace ScreenCapture_Interface
             {
                 case emTimerCaptureMode.OnTime:
                     SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
-                    Pl_OnTime.Enabled = false;
                     break;
 
                 case emTimerCaptureMode.FromTo:
@@ -98,10 +97,7 @@ namespace ScreenCapture_Interface
                     SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
                     if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
                     {
-                        Btn_Start.Enabled = true;
-                        Btn_Stop.Enabled = false;
-                        Btn_Folder.Enabled = true;
-                        Pl_TimerMode.Enabled = true;
+                        InterfaceRelease();
                         return;
                     }
 
@@ -115,16 +111,14 @@ namespace ScreenCapture_Interface
                             CaptureTime = CaptureTime.AddMinutes(Frequency);
                         }
                     }
-
-                    Pl_FromTo.Enabled = false;
                     break;
             }
 
-            TimerSet.TimerInvoke tiCallback = CheckTimer;
+            TimerSet.TimerInvoke tiCallback = TimerCheck;
             TS.TimerStart(1000, tiCallback);
         }
 
-        private void CheckTimer()
+        private void TimerCheck()
         {
             DateTime dtNow = DateTime.Now;
 
@@ -157,6 +151,44 @@ namespace ScreenCapture_Interface
         private void TimerStop()
         {
             TS.TimerStop();
+        }
+
+        private void InterfaceLock()
+        {
+            switch (TimerCaptureMode)
+            {
+                case emTimerCaptureMode.OnTime:
+                    Pl_OnTime.Enabled = false;
+                    break;
+
+                case emTimerCaptureMode.FromTo:
+                    Pl_FromTo.Enabled = false;
+                    break;
+            }
+
+            Pl_TimerMode.Enabled = false;
+            Btn_Start.Enabled = false;
+            Btn_Stop.Enabled = true;
+            Btn_Folder.Enabled = false;
+        }
+
+        private void InterfaceRelease()
+        {
+            switch (TimerCaptureMode)
+            {
+                case emTimerCaptureMode.OnTime:
+                    Pl_OnTime.Enabled = true;
+                    break;
+
+                case emTimerCaptureMode.FromTo:
+                    Pl_FromTo.Enabled = true;
+                    break;
+            }
+
+            Pl_TimerMode.Enabled = true;
+            Btn_Start.Enabled = true;
+            Btn_Stop.Enabled = false;
+            Btn_Folder.Enabled = true;
         }
         #endregion
 
@@ -215,33 +247,14 @@ namespace ScreenCapture_Interface
                 return;
             }
 
-            Btn_Start.Enabled = false;
-            Btn_Stop.Enabled = true;
-            Btn_Folder.Enabled = false;
-            Pl_TimerMode.Enabled = false;
-
+            InterfaceLock();
             TimerStart();
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
         {
             TimerStop();
-
-            Btn_Start.Enabled = true;
-            Btn_Stop.Enabled = false;
-            Btn_Folder.Enabled = true;
-            Pl_TimerMode.Enabled = true;
-
-            switch (TimerCaptureMode)
-            {
-                case emTimerCaptureMode.OnTime:
-                    Pl_OnTime.Enabled = true;
-                    break;
-
-                case emTimerCaptureMode.FromTo:
-                    Pl_FromTo.Enabled = true;
-                    break;
-            }
+            InterfaceRelease();
         }
 
         private void Rb_Combine_CheckedChanged(object sender, EventArgs e)
