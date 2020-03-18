@@ -167,7 +167,6 @@
             0,
             0});
             this.Num_M.Name = "Num_M";
-            this.Num_M.ReadOnly = true;
             this.Num_M.Size = new System.Drawing.Size(31, 22);
             this.Num_M.TabIndex = 7;
             this.Num_M.Enter += new System.EventHandler(this.Num_M_Enter);
@@ -181,7 +180,6 @@
             0,
             0});
             this.Num_H.Name = "Num_H";
-            this.Num_H.ReadOnly = true;
             this.Num_H.Size = new System.Drawing.Size(31, 22);
             this.Num_H.TabIndex = 6;
             this.Num_H.Enter += new System.EventHandler(this.Num_H_Enter);
@@ -189,11 +187,13 @@
             // Lbl_Tip
             // 
             this.Lbl_Tip.AutoSize = true;
+            this.Lbl_Tip.ForeColor = System.Drawing.SystemColors.Highlight;
             this.Lbl_Tip.Location = new System.Drawing.Point(3, 3);
             this.Lbl_Tip.Name = "Lbl_Tip";
-            this.Lbl_Tip.Size = new System.Drawing.Size(175, 12);
+            this.Lbl_Tip.Size = new System.Drawing.Size(224, 12);
             this.Lbl_Tip.TabIndex = 8;
-            this.Lbl_Tip.Text = "Press [Space] or Set Time to Capture";
+            this.Lbl_Tip.Text = "[Press PrintScreen Key / Set Timer To Capture]";
+            this.Lbl_Tip.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Rb_Combine
             // 
@@ -237,7 +237,6 @@
             0,
             0});
             this.Num_FromH.Name = "Num_FromH";
-            this.Num_FromH.ReadOnly = true;
             this.Num_FromH.Size = new System.Drawing.Size(31, 22);
             this.Num_FromH.TabIndex = 8;
             this.Num_FromH.Enter += new System.EventHandler(this.Num_FromH_Enter);
@@ -251,7 +250,6 @@
             0,
             0});
             this.Num_FromM.Name = "Num_FromM";
-            this.Num_FromM.ReadOnly = true;
             this.Num_FromM.Size = new System.Drawing.Size(31, 22);
             this.Num_FromM.TabIndex = 9;
             this.Num_FromM.Enter += new System.EventHandler(this.Num_FromM_Enter);
@@ -274,7 +272,6 @@
             0,
             0});
             this.Num_ToH.Name = "Num_ToH";
-            this.Num_ToH.ReadOnly = true;
             this.Num_ToH.Size = new System.Drawing.Size(31, 22);
             this.Num_ToH.TabIndex = 10;
             this.Num_ToH.Enter += new System.EventHandler(this.Num_ToH_Enter);
@@ -288,7 +285,6 @@
             0,
             0});
             this.Num_ToM.Name = "Num_ToM";
-            this.Num_ToM.ReadOnly = true;
             this.Num_ToM.Size = new System.Drawing.Size(31, 22);
             this.Num_ToM.TabIndex = 11;
             this.Num_ToM.Enter += new System.EventHandler(this.Num_ToM_Enter);
@@ -325,7 +321,6 @@
             0,
             0});
             this.Num_FreM.Name = "Num_FreM";
-            this.Num_FreM.ReadOnly = true;
             this.Num_FreM.Size = new System.Drawing.Size(31, 22);
             this.Num_FreM.TabIndex = 12;
             this.Num_FreM.Value = new decimal(new int[] {
@@ -498,6 +493,7 @@
             this.Name = "Form1";
             this.Text = "ScreenCapture";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.contextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Num_M)).EndInit();

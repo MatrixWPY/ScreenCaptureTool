@@ -6,45 +6,45 @@ namespace ScreenCapture_Interface
 {
     public class ScreenCapture
     {
-        public void ScreenCapture_Single(string FilePath)
+        public void ScreenCapture_Single(string strFilePath)
         {
             #region 多螢幕單張截圖
             DateTime dtNow = DateTime.Now;
-            int Screen_W = 0, Screen_H = 0;
+            int iScreenW = 0, iScreenH = 0;
             foreach (var t in Screen.AllScreens)
             {
-                Screen_W += t.Bounds.Width;
-                Screen_H = (Screen_H < t.Bounds.Height) ? t.Bounds.Height : Screen_H;
+                iScreenW += t.Bounds.Width;
+                iScreenH = (iScreenH < t.Bounds.Height) ? t.Bounds.Height : iScreenH;
             }
 
-            Bitmap myImage = new Bitmap(Screen_W, Screen_H);
-            Graphics g = Graphics.FromImage(myImage);
-            int temp_w = 0, temp_h = 0;
+            Bitmap objBitmap = new Bitmap(iScreenW, iScreenH);
+            Graphics objGraphics = Graphics.FromImage(objBitmap);
+            int iTempW = 0, iTempH = 0;
             foreach (var t in Screen.AllScreens)
             {
-                g.CopyFromScreen(new Point(t.Bounds.Left, t.Bounds.Top), new Point(temp_w, temp_h), new Size(t.Bounds.Width, t.Bounds.Height));
-                temp_w += t.Bounds.Width;
+                objGraphics.CopyFromScreen(new Point(t.Bounds.Left, t.Bounds.Top), new Point(iTempW, iTempH), new Size(t.Bounds.Width, t.Bounds.Height));
+                iTempW += t.Bounds.Width;
             }
-            myImage.Save(FilePath + @"\" + dtNow.ToString("yyyy-MM-dd_HH-mm-ss") + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-            g.Dispose();
-            myImage.Dispose();
+            objBitmap.Save(strFilePath + @"\" + dtNow.ToString("yyyy-MM-dd_HH-mm-ss") + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            objGraphics.Dispose();
+            objBitmap.Dispose();
             #endregion
         }
 
-        public void ScreenCapture_Multiple(string FilePath)
+        public void ScreenCapture_Multiple(string strFilePath)
         {
             #region 多螢幕多張截圖
-            int cnt = 0;
             DateTime dtNow = DateTime.Now;
+            int iCnt = 0;
             foreach (var t in Screen.AllScreens)
             {
-                ++cnt;
-                Bitmap myImage = new Bitmap(t.Bounds.Width, t.Bounds.Height);
-                Graphics g = Graphics.FromImage(myImage);
-                g.CopyFromScreen(new Point(t.Bounds.Left, t.Bounds.Top), new Point(0, 0), new Size(t.Bounds.Width, t.Bounds.Height));
-                myImage.Save(FilePath + @"\" + dtNow.ToString("yyyy-MM-dd_HH-mm-ss_") + cnt + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                g.Dispose();
-                myImage.Dispose();
+                ++iCnt;
+                Bitmap objBitmap = new Bitmap(t.Bounds.Width, t.Bounds.Height);
+                Graphics objGraphics = Graphics.FromImage(objBitmap);
+                objGraphics.CopyFromScreen(new Point(t.Bounds.Left, t.Bounds.Top), new Point(0, 0), new Size(t.Bounds.Width, t.Bounds.Height));
+                objBitmap.Save(strFilePath + @"\" + dtNow.ToString("yyyy-MM-dd_HH-mm-ss_") + iCnt + ".jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                objGraphics.Dispose();
+                objBitmap.Dispose();
             }
             #endregion
         }

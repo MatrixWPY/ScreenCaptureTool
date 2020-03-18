@@ -8,11 +8,16 @@ namespace ScreenCapture_Interface
     {
         private static NotifyIcon NIcon;
         private static HotKey HK;
-        private static TimerSet Timer;
+        private static TimerSet TS;
         private static ScreenCapture SC;
         private static string SavePath = string.Empty;
         private static int MutipleScreenMode;
         private static int TimerCaptureMode;
+        private static DateTime SetTime;
+        private static DateTime SetTimeFrom;
+        private static DateTime SetTimeTo;
+        private static int Frequency;
+        private static DateTime CaptureTime;
 
         #region [Initial]
         public Form1()
@@ -22,20 +27,12 @@ namespace ScreenCapture_Interface
             RegisterHotKey();
         }
 
-        ~Form1()
-        {
-            HK.Dispose(); //取消熱鍵
-            //SC.Dispose();
-            Timer.Dispose();
-            NIcon.Dispose();
-        }
-
         protected void Initial()
         {
             MutipleScreenMode = 0;
             TimerCaptureMode = 0;
             NIcon = new NotifyIcon(this.components);
-            Timer = new TimerSet();
+            TS = new TimerSet();
             SC = new ScreenCapture();
 
             //Btn_Folder_Click(null, null);
@@ -48,7 +45,7 @@ namespace ScreenCapture_Interface
             {
                 HK.Dispose();                                           //取消熱鍵
             }
-            HK = new HotKey(this.Handle, Keys.Space, Keys.None);        //註冊Space為熱鍵, 如果不要組合鍵請傳Keys.None當參數
+            HK = new HotKey(this.Handle, Keys.PrintScreen, Keys.None);  //註冊[PrintScreen]為熱鍵, 如果不要組合鍵請傳Keys.None當參數
             HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Click); //HotKey事件
         }
         #endregion
@@ -73,26 +70,26 @@ namespace ScreenCapture_Interface
             switch (TimerCaptureMode)
             {
                 case 0:
-                    Timer.SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
+                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
                     Pl_OnTime.Enabled = false;
                     break;
 
                 case 1:
-                    Timer.SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
-                    Timer.SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
-                    if (!CheckSetTimeFromTo(Timer.SetTimeFrom, Timer.SetTimeTo))
+                    SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
+                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
                     {
                         return;
                     }
 
-                    Timer.Frequency = Convert.ToInt32(Num_FreM.Value);
-                    Timer.CaptureTime = Timer.SetTimeFrom.AddMinutes(Timer.Frequency);
+                    Frequency = Convert.ToInt32(Num_FreM.Value);
+                    CaptureTime = SetTimeFrom.AddMinutes(Frequency);
                     DateTime dtNow = DateTime.Now;
-                    if (dtNow > Timer.SetTimeFrom && dtNow < Timer.SetTimeTo)
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
                     {
-                        while (dtNow >= Timer.CaptureTime)
+                        while (dtNow >= CaptureTime)
                         {
-                            Timer.CaptureTime = Timer.CaptureTime.AddMinutes(Timer.Frequency);
+                            CaptureTime = CaptureTime.AddMinutes(Frequency);
                         }
                     }
 
@@ -100,13 +97,43 @@ namespace ScreenCapture_Interface
                     break;
             }
 
-            TimerSet.TimerInvoke tiCallback = InvokeCapture;
-            Timer.TimerStart(TimerCaptureMode, tiCallback);
+            TimerSet.TimerInvoke tiCallback = CheckTimer;
+            TS.TimerStart(1000, tiCallback);
+        }
+
+        private void CheckTimer()
+        {
+            DateTime dtNow = DateTime.Now;
+
+            switch (TimerCaptureMode)
+            {
+                case 0:
+                    if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
+                    {
+                        InvokeCapture();
+                    }
+                    break;
+
+                case 1:
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
+                    {
+                        if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
+                        {
+                            CaptureTime = CaptureTime.AddMinutes(Frequency);
+                            InvokeCapture();
+                        }
+                    }
+                    else
+                    {
+                        CaptureTime = SetTimeFrom.AddMinutes(Frequency);
+                    }
+                    break;
+            }
         }
 
         private void TimerStop()
         {
-            Timer.TimerStop();
+            TS.TimerStop();
         }
         #endregion
 
@@ -194,32 +221,6 @@ namespace ScreenCapture_Interface
             }
         }
 
-        private void Form1_SizeChanged(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.ShowInTaskbar = false; //讓程式在工具列中隱藏
-                RegisterHotKey();
-            }
-        }
-
-        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            this.ShowInTaskbar = true;                   //顯示在工具列
-            this.WindowState = FormWindowState.Normal;   //還原視窗
-            RegisterHotKey();
-        }
-
-        private void ToolStripMenuItem_ExitClick(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void ToolStripMenuItem_RestoreClick(object sender, EventArgs e)
-        {
-            NotifyIcon_MouseDoubleClick(null, null);
-        }
-
         private void Rb_Combine_CheckedChanged(object sender, EventArgs e)
         {
             if (Rb_Combine.Checked)
@@ -256,44 +257,83 @@ namespace ScreenCapture_Interface
             Num_FreM.Value = 1;
         }
 
-        private void SelectAll(NumericUpDown numericUpDown)
+        private void NotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            numericUpDown.Select(0, numericUpDown.Value.ToString().Length);
+            this.WindowState = FormWindowState.Normal;   //還原視窗
+        }
+
+        private void ToolStripMenuItem_ExitClick(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ToolStripMenuItem_RestoreClick(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Normal;   //還原視窗
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            switch (this.WindowState)
+            {
+                case FormWindowState.Normal:
+                    this.ShowInTaskbar = true;  //程式在工具列中顯示
+                    break;
+
+                case FormWindowState.Minimized:
+                    this.ShowInTaskbar = false; //程式在工具列中隱藏
+                    break;
+            }
+
+            RegisterHotKey();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            HK.Dispose();
+            //SC.Dispose();
+            TS.Dispose();
+            NIcon.Dispose();
+        }
+
+        private void NumericUpDown_Select(NumericUpDown objNumericUpDown)
+        {
+            objNumericUpDown.Select(0, objNumericUpDown.Value.ToString().Length);
         }
 
         private void Num_H_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_H);
+            NumericUpDown_Select(Num_H);
         }
 
         private void Num_M_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_M);
+            NumericUpDown_Select(Num_M);
         }
 
         private void Num_FromH_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_FromH);
+            NumericUpDown_Select(Num_FromH);
         }
 
         private void Num_FromM_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_FromM);
+            NumericUpDown_Select(Num_FromM);
         }
 
         private void Num_ToH_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_ToH);
+            NumericUpDown_Select(Num_ToH);
         }
 
         private void Num_ToM_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_ToM);
+            NumericUpDown_Select(Num_ToM);
         }
 
         private void Num_FreM_Enter(object sender, EventArgs e)
         {
-            SelectAll(Num_FreM);
+            NumericUpDown_Select(Num_FreM);
         }
         #endregion
     }
