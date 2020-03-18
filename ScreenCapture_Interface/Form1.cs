@@ -42,8 +42,18 @@ namespace ScreenCapture_Interface
         public Form1()
         {
             InitializeComponent();
-            Initial();
             RegisterHotKey();
+            Initial();
+        }
+
+        private void RegisterHotKey()
+        {
+            if (null != HK)
+            {
+                HK.Dispose();                                           //取消熱鍵
+            }
+            HK = new HotKey(this.Handle, Keys.PrintScreen, Keys.None);  //註冊[PrintScreen]為熱鍵, 如果不要組合鍵請傳Keys.None當參數
+            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Click); //HotKey事件
         }
 
         protected void Initial()
@@ -57,103 +67,10 @@ namespace ScreenCapture_Interface
             //Btn_Folder_Click(null, null);
             //this.WindowState = FormWindowState.Minimized;
         }
-
-        private void RegisterHotKey()
-        {
-            if (null != HK)
-            {
-                HK.Dispose();                                           //取消熱鍵
-            }
-            HK = new HotKey(this.Handle, Keys.PrintScreen, Keys.None);  //註冊[PrintScreen]為熱鍵, 如果不要組合鍵請傳Keys.None當參數
-            HK.OnHotkey += new HotKey.HotkeyEventHandler(Hotkey_Click); //HotKey事件
-        }
         #endregion
 
-        #region [Logic]
-        private void InvokeCapture()
-        {
-            switch (MutipleScreenMode)
-            {
-                case emMutipleScreenMode.Combine:
-                    SC.ScreenCapture_Single(SavePath);
-                    break;
-
-                case emMutipleScreenMode.Seperate:
-                    SC.ScreenCapture_Multiple(SavePath);
-                    break;
-            }
-        }
-
-        private void TimerStart()
-        {
-            switch (TimerCaptureMode)
-            {
-                case emTimerCaptureMode.OnTime:
-                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
-                    break;
-
-                case emTimerCaptureMode.FromTo:
-                    SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
-                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
-                    if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
-                    {
-                        InterfaceRelease();
-                        return;
-                    }
-
-                    Frequency = Convert.ToInt32(Num_FreM.Value);
-                    CaptureTime = SetTimeFrom.AddMinutes(Frequency);
-                    DateTime dtNow = DateTime.Now;
-                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
-                    {
-                        while (dtNow >= CaptureTime)
-                        {
-                            CaptureTime = CaptureTime.AddMinutes(Frequency);
-                        }
-                    }
-                    break;
-            }
-
-            TimerSet.TimerInvoke tiCallback = TimerCheck;
-            TS.TimerStart(1000, tiCallback);
-        }
-
-        private void TimerCheck()
-        {
-            DateTime dtNow = DateTime.Now;
-
-            switch (TimerCaptureMode)
-            {
-                case emTimerCaptureMode.OnTime:
-                    if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
-                    {
-                        InvokeCapture();
-                    }
-                    break;
-
-                case emTimerCaptureMode.FromTo:
-                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
-                    {
-                        if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
-                        {
-                            CaptureTime = CaptureTime.AddMinutes(Frequency);
-                            InvokeCapture();
-                        }
-                    }
-                    else
-                    {
-                        CaptureTime = SetTimeFrom.AddMinutes(Frequency);
-                    }
-                    break;
-            }
-        }
-
-        private void TimerStop()
-        {
-            TS.TimerStop();
-        }
-
-        private void InterfaceLock()
+        #region [GUI]
+        private void GUILock()
         {
             switch (TimerCaptureMode)
             {
@@ -172,7 +89,7 @@ namespace ScreenCapture_Interface
             Btn_Folder.Enabled = false;
         }
 
-        private void InterfaceRelease()
+        private void GUIRelease()
         {
             switch (TimerCaptureMode)
             {
@@ -190,27 +107,10 @@ namespace ScreenCapture_Interface
             Btn_Stop.Enabled = false;
             Btn_Folder.Enabled = true;
         }
-        #endregion
 
-        #region [Validate]
-        private bool CheckSavePath(string strPath)
+        private void NumericUpDown_Select(NumericUpDown objNumericUpDown)
         {
-            if (String.IsNullOrWhiteSpace(strPath) || !Directory.Exists(strPath))
-            {
-                MessageBox.Show("Save Path Not Exist !");
-                return false;
-            }
-            return true;
-        }
-
-        private bool CheckSetTimeFromTo(DateTime dtFrom, DateTime dtTo)
-        {
-            if (dtFrom >= dtTo)
-            {
-                MessageBox.Show("Timer From >= To !");
-                return false;
-            }
-            return true;
+            objNumericUpDown.Select(0, objNumericUpDown.Value.ToString().Length);
         }
         #endregion
 
@@ -247,14 +147,14 @@ namespace ScreenCapture_Interface
                 return;
             }
 
-            InterfaceLock();
+            GUILock();
             TimerStart();
         }
 
         private void Btn_Stop_Click(object sender, EventArgs e)
         {
             TimerStop();
-            InterfaceRelease();
+            GUIRelease();
         }
 
         private void Rb_Combine_CheckedChanged(object sender, EventArgs e)
@@ -326,15 +226,10 @@ namespace ScreenCapture_Interface
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            HK.Dispose();
             //SC.Dispose();
             TS.Dispose();
             NIcon.Dispose();
-        }
-
-        private void NumericUpDown_Select(NumericUpDown objNumericUpDown)
-        {
-            objNumericUpDown.Select(0, objNumericUpDown.Value.ToString().Length);
+            HK.Dispose();
         }
 
         private void Num_H_Enter(object sender, EventArgs e)
@@ -370,6 +265,113 @@ namespace ScreenCapture_Interface
         private void Num_FreM_Enter(object sender, EventArgs e)
         {
             NumericUpDown_Select(Num_FreM);
+        }
+        #endregion
+
+        #region [Validate]
+        private bool CheckSavePath(string strPath)
+        {
+            if (String.IsNullOrWhiteSpace(strPath) || !Directory.Exists(strPath))
+            {
+                MessageBox.Show("Save Path Not Exist !");
+                return false;
+            }
+            return true;
+        }
+
+        private bool CheckSetTimeFromTo(DateTime dtFrom, DateTime dtTo)
+        {
+            if (dtFrom >= dtTo)
+            {
+                MessageBox.Show("Timer From >= To !");
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region [Logic]
+        private void InvokeCapture()
+        {
+            switch (MutipleScreenMode)
+            {
+                case emMutipleScreenMode.Combine:
+                    SC.ScreenCapture_Single(SavePath);
+                    break;
+
+                case emMutipleScreenMode.Seperate:
+                    SC.ScreenCapture_Multiple(SavePath);
+                    break;
+            }
+        }
+
+        private void TimerStart()
+        {
+            switch (TimerCaptureMode)
+            {
+                case emTimerCaptureMode.OnTime:
+                    SetTime = Convert.ToDateTime(Num_H.Value + ":" + Num_M.Value + ":00");
+                    break;
+
+                case emTimerCaptureMode.FromTo:
+                    SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
+                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
+                    {
+                        GUIRelease();
+                        return;
+                    }
+
+                    Frequency = Convert.ToInt32(Num_FreM.Value);
+                    CaptureTime = SetTimeFrom.AddMinutes(Frequency);
+                    DateTime dtNow = DateTime.Now;
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
+                    {
+                        while (dtNow >= CaptureTime)
+                        {
+                            CaptureTime = CaptureTime.AddMinutes(Frequency);
+                        }
+                    }
+                    break;
+            }
+
+            TimerSet.TimerInvoke tiCallback = TimerCheck;
+            TS.TimerStart(1000, tiCallback);
+        }
+
+        private void TimerCheck()
+        {
+            DateTime dtNow = DateTime.Now;
+
+            switch (TimerCaptureMode)
+            {
+                case emTimerCaptureMode.OnTime:
+                    if (dtNow.ToString("HH:mm:ss") == SetTime.ToString("HH:mm:ss"))
+                    {
+                        InvokeCapture();
+                    }
+                    break;
+
+                case emTimerCaptureMode.FromTo:
+                    if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
+                    {
+                        if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
+                        {
+                            CaptureTime = CaptureTime.AddMinutes(Frequency);
+                            InvokeCapture();
+                        }
+                    }
+                    else
+                    {
+                        CaptureTime = SetTimeFrom.AddMinutes(Frequency);
+                    }
+                    break;
+            }
+        }
+
+        private void TimerStop()
+        {
+            TS.TimerStop();
         }
         #endregion
     }
