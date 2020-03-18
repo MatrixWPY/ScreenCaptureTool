@@ -79,6 +79,10 @@ namespace ScreenCapture_Interface
                     SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
                     if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
                     {
+                        Btn_Start.Enabled = true;
+                        Btn_Stop.Enabled = false;
+                        Btn_Folder.Enabled = true;
+                        Pl_TimerMode.Enabled = true;
                         return;
                     }
 

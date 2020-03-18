@@ -190,9 +190,9 @@
             this.Lbl_Tip.ForeColor = System.Drawing.SystemColors.Highlight;
             this.Lbl_Tip.Location = new System.Drawing.Point(3, 3);
             this.Lbl_Tip.Name = "Lbl_Tip";
-            this.Lbl_Tip.Size = new System.Drawing.Size(224, 12);
+            this.Lbl_Tip.Size = new System.Drawing.Size(168, 12);
             this.Lbl_Tip.TabIndex = 8;
-            this.Lbl_Tip.Text = "[Press PrintScreen Key / Set Timer To Capture]";
+            this.Lbl_Tip.Text = "[Press PrintScreen Key / Set Timer]";
             this.Lbl_Tip.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Rb_Combine
@@ -491,7 +491,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "ScreenCapture";
+            this.Text = "Screen Capture";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
