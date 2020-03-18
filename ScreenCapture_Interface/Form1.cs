@@ -17,7 +17,7 @@ namespace ScreenCapture_Interface
         private static DateTime SetTime;
         private static DateTime SetTimeFrom;
         private static DateTime SetTimeTo;
-        private static int Frequency;
+        private static int FreqMin;
         private static DateTime CaptureTime;
 
         private enum emMutipleScreenMode
@@ -315,21 +315,21 @@ namespace ScreenCapture_Interface
 
                 case emTimerCaptureMode.FromTo:
                     SetTimeFrom = Convert.ToDateTime(Num_FromH.Value + ":" + Num_FromM.Value + ":00");
-                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":59");
+                    SetTimeTo = Convert.ToDateTime(Num_ToH.Value + ":" + Num_ToM.Value + ":01");
                     if (!CheckSetTimeFromTo(SetTimeFrom, SetTimeTo))
                     {
                         GUIRelease();
                         return;
                     }
 
-                    Frequency = Convert.ToInt32(Num_FreM.Value);
-                    CaptureTime = SetTimeFrom.AddMinutes(Frequency);
+                    FreqMin = Convert.ToInt32(Num_FreM.Value);
+                    CaptureTime = SetTimeFrom.AddMinutes(FreqMin);
                     DateTime dtNow = DateTime.Now;
                     if (dtNow > SetTimeFrom && dtNow < SetTimeTo)
                     {
                         while (dtNow >= CaptureTime)
                         {
-                            CaptureTime = CaptureTime.AddMinutes(Frequency);
+                            CaptureTime = CaptureTime.AddMinutes(FreqMin);
                         }
                     }
                     break;
@@ -350,6 +350,10 @@ namespace ScreenCapture_Interface
                     {
                         InvokeCapture();
                     }
+                    if (dtNow > SetTime)
+                    {
+                        SetTime = SetTime.AddDays(1);
+                    }
                     break;
 
                 case emTimerCaptureMode.FromTo:
@@ -357,13 +361,15 @@ namespace ScreenCapture_Interface
                     {
                         if (dtNow.ToString("HH:mm:ss") == CaptureTime.ToString("HH:mm:ss"))
                         {
-                            CaptureTime = CaptureTime.AddMinutes(Frequency);
+                            CaptureTime = CaptureTime.AddMinutes(FreqMin);
                             InvokeCapture();
                         }
                     }
-                    else
+                    if (dtNow > SetTimeTo)
                     {
-                        CaptureTime = SetTimeFrom.AddMinutes(Frequency);
+                        SetTimeFrom = SetTimeFrom.AddDays(1);
+                        SetTimeTo = SetTimeTo.AddDays(1);
+                        CaptureTime = SetTimeFrom.AddMinutes(FreqMin);
                     }
                     break;
             }
