@@ -1,4 +1,4 @@
-﻿namespace ScreenCapture_Interface
+﻿namespace ScreenCaptureTool
 {
     partial class Form1
     {

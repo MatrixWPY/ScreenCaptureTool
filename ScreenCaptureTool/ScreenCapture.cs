@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ScreenCapture_Interface
+namespace ScreenCaptureTool
 {
     public class ScreenCapture
     {

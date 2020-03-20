@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 
-namespace ScreenCapture_Interface
+namespace ScreenCaptureTool
 {
     public partial class Form1 : Form
     {

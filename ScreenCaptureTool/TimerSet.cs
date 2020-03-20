@@ -1,6 +1,6 @@
 ﻿using System.Timers;
 
-namespace ScreenCapture_Interface
+namespace ScreenCaptureTool
 {
     public class TimerSet
     {

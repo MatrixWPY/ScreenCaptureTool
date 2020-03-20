@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ScreenCapture_Interface
+namespace ScreenCaptureTool
 {
     public class HotKey : IMessageFilter, IDisposable
     {
