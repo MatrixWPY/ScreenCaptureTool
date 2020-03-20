@@ -1,6 +1,6 @@
 ﻿namespace ScreenCaptureTool
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.Btn_Start = new System.Windows.Forms.Button();
             this.Btn_Stop = new System.Windows.Forms.Button();
             this.Btn_Folder = new System.Windows.Forms.Button();

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace ScreenCaptureTool
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private static NotifyIcon NIcon;
         private static HotKey HK;
@@ -39,7 +39,7 @@ namespace ScreenCaptureTool
         }
 
         #region [Initial]
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             RegisterHotKey();
